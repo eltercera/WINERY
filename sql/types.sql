@@ -77,5 +77,67 @@ CREATE TYPE telefono as (
   codinternacional smallint,
   numero varchar(10),
   tipo tipotelefono,
-  codarea smaillint
+  codarea smallint
+);
+
+/* Res_Solicitud
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE res_solicitud as (
+  idvino integer,
+  valoracion integer
+);
+
+/* DireccionGeneral
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE direcciongeneral as (
+  direccion varchar(200),
+  telefonos telefono[],
+  web varchar(200),
+  email varchar(20)
+);
+
+/* NombrePersona
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE nombrepersona as (
+  nombre varchar(25),
+  snombre varchar(25),
+  apellido varchar(25),
+  sapellido varchar(25)
+);
+
+/* Cultivo
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE cultivo as (
+  ano smallint,
+  hectareascultivadas float
+);
+
+/* HistoriaBodega
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE historiabodega as (
+  ano smallint,
+  echo text
+);
+
+/* Calificacion_Vino
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE calificacion_vino as (
+  nombre varchar(50),
+  valor integer,
+  ano smallint
+);
+
+/* Costo
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE costo as (
+  cant_muestas integer,
+  precio float,
+  pais varchar(50)
 );

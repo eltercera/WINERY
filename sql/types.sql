@@ -10,7 +10,7 @@ CREATE TYPE suelo as (
  * Fecha de Creacion: 14/05/2015
  */
 CREATE TYPE exportacion as (
-  catidadbotella integer,
+  cantidadbotella integer,
   pais varchar(50)
 );
 
@@ -20,7 +20,7 @@ CREATE TYPE exportacion as (
 CREATE TYPE tipolegislacion AS ENUM ('ley', 'norma', 'decreto');
 CREATE TYPE legislacion as (
   nombre varchar(50),
-  ano smallint,
+  ano integer,
   tipo tipolegislacion,
   descripcion text,
   documento oid
@@ -74,10 +74,10 @@ CREATE TYPE des_gen_region as (
  */
 CREATE TYPE tipotelefono AS ENUM ('local', 'movil', 'oficina');
 CREATE TYPE telefono as (
-  codinternacional smallint,
+  codinternacional integer,
   numero varchar(10),
   tipo tipotelefono,
-  codarea smallint
+  codarea integer
 );
 
 /* Res_Solicitud
@@ -112,7 +112,7 @@ CREATE TYPE nombrepersona as (
  * Fecha de Creacion: 15/05/2015
  */
 CREATE TYPE cultivo as (
-  ano smallint,
+  ano integer,
   hectareascultivadas float
 );
 
@@ -120,7 +120,7 @@ CREATE TYPE cultivo as (
  * Fecha de Creacion: 15/05/2015
  */
 CREATE TYPE historiabodega as (
-  ano smallint,
+  ano integer,
   echo text
 );
 
@@ -130,7 +130,7 @@ CREATE TYPE historiabodega as (
 CREATE TYPE calificacion_vino as (
   nombre varchar(50),
   valor integer,
-  ano smallint
+  ano integer
 );
 
 /* Costo
@@ -140,4 +140,39 @@ CREATE TYPE costo as (
   cant_muestas integer,
   precio float,
   pais varchar(50)
+);
+
+/* Fase_Elaboracion_Vino
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE fas_ela_vin AS ENUM ('plantación', 'espera', 'vendimia', 'prensado','fermentación','maruración','filtrado','embotellamiento');
+CREATE TYPE fase_elaboracion_vino as (
+  secuencia fas_ela_vin,
+  detalles text
+);
+
+/* Valoriacion
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE TYPE val_fase AS ENUM ('olfativa ', 'gustativa');
+CREATE TYPE val_elemento AS ENUM ('intensidad', 'calidad');
+CREATE TYPE val_clasificacion AS ENUM ('catador', 'vino');
+CREATE TYPE Valoriacion as (
+  fase val_fase,
+  elemento val_elemento,
+  rango_inicial integer,
+  rango_final integer,
+  clasificacion val_clasificacion
+);
+
+/* Premio
+ * Fecha de Creacion: 14/05/2015
+ */
+CREATE TYPE pro_reco AS ENUM ('medalla ', 'trofeo', 'diploma', 'liston');
+CREATE TYPE premio as (
+  cant_dinero float,
+  posicion integer,
+  reconocimiento pro_reco,
+  valor_reco integer,
+  descripcion text
 );

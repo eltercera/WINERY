@@ -3,7 +3,7 @@
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE DEN_VAR (
+CREATE TABLE IF NOT EXISTS DEN_VAR (
   FK_Denominacion integer NOT NULL,
   FK_Variedad integer NOT NULL,
   FK_Clasificacion integer NOT NULL
@@ -14,7 +14,7 @@ CREATE TABLE DEN_VAR (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE DV_PR_V (
+CREATE TABLE IF NOT EXISTS DV_PR_V (
   FK_Region integer NOT NULL,
   FK_Pais integer NOT NULL,
   FK_Vinedo integer NOT NULL,
@@ -27,10 +27,10 @@ CREATE TABLE DV_PR_V (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE ESCALA (
+CREATE TABLE IF NOT EXISTS ESCALA (
   Esc_ID serial NOT NULL,
   Esc_Tipo varchar(10) NOT NULL,
-  Esc_Lista_Valoracion Valoracion ARRAY
+  Esc_Lista_Valoracion fase_elaboracion_vino ARRAY
 );
 
 /*
@@ -38,7 +38,7 @@ CREATE TABLE ESCALA (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE ESPECIALISTA (
+CREATE TABLE IF NOT EXISTS ESPECIALISTA (
   FK_Region integer NOT NULL,
   FK_Catador_Consultor integer NOT NULL
 );
@@ -48,7 +48,7 @@ CREATE TABLE ESPECIALISTA (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE HIS_PRESENTACION (
+CREATE TABLE IF NOT EXISTS HIS_PRESENTACION (
   HP_Ano integer NOT NULL,
   HP_Precio float,
   FK_Presentacion integer NOT NULL,
@@ -60,14 +60,13 @@ CREATE TABLE HIS_PRESENTACION (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE INSCRIPCION_VINO (
+CREATE TABLE IF NOT EXISTS INSCRIPCION_VINO (
   IV_ID serial NOT NULL,
   IV_Costo_Total float NOT NULL,
   IV_Fecha_Inscripcion date NOT NULL,
   IV_FechaPago date,
   IV_Num_Muestras integer,
   FK_Bodega integer,
-  FK_Catador_Consultor integer,
   FK_Catador_Consultor integer,
   FK_Calendario integer NOT NULL
 );
@@ -77,7 +76,7 @@ CREATE TABLE INSCRIPCION_VINO (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE JUEZ (
+CREATE TABLE IF NOT EXISTS JUEZ (
   FK_Catador_Consultor integer NOT NULL,
   FK_Calendario integer NOT NULL
 );
@@ -87,7 +86,7 @@ CREATE TABLE JUEZ (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE LUGAR (
+CREATE TABLE IF NOT EXISTS LUGAR (
   Lug_ID serial NOT NULL,
   Lug_Nombre varchar(50) NOT NULL,
   Lug_Tipo varchar(6) NOT NULL,
@@ -102,7 +101,7 @@ CREATE TABLE LUGAR (
 * OBS: FALTAN TIPO DE DATO des_cata
 */
 
-CREATE TABLE MARCA (
+CREATE TABLE IF NOT EXISTS MARCA (
   Mar_ID serial NOT NULL,
   Mar_Descripcion text NOT NULL,
   Mar_Nombre varchar(50) NOT NULL,
@@ -128,7 +127,7 @@ CREATE TABLE MARCA (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE MARIDAJE (
+CREATE TABLE IF NOT EXISTS MARIDAJE (
   Mar_Descripcion text NOT NULL,
   FK_Comida integer NOT NULL,
   FK_Marca integer NOT NULL
@@ -139,7 +138,7 @@ CREATE TABLE MARIDAJE (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE MUESTRA (
+CREATE TABLE IF NOT EXISTS MUESTRA (
   Mus_ID serial NOT NULL,
   Mus_Numero integer NOT NULL,
   Mus_Anada integer NOT NULL,
@@ -153,7 +152,7 @@ CREATE TABLE MUESTRA (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE OREV (
+CREATE TABLE IF NOT EXISTS OREV (
   Ore_ID serial NOT NULL,
   Ore_Nombre varchar(50) NOT NULL,
   Ore_Dir_Gen direcciongeneral NOT NULL,
@@ -165,7 +164,7 @@ CREATE TABLE OREV (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE ORE_CON (
+CREATE TABLE IF NOT EXISTS ORE_CON (
   FK_OREV integer NOT NULL,
   FK_Concurso integer NOT NULL
 );
@@ -175,7 +174,7 @@ CREATE TABLE ORE_CON (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE PAIS (
+CREATE TABLE IF NOT EXISTS PAIS (
   Pai_ID serial NOT NULL,
   Pai_Nombre varchar(50) NOT NULL,
   Pai_Continente varchar(10) NOT NULL,
@@ -190,7 +189,7 @@ CREATE TABLE PAIS (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE PAI_REG (
+CREATE TABLE IF NOT EXISTS PAI_REG (
   FK_Pais integer NOT NULL,
   FK_Region integer NOT NULL
 );
@@ -200,7 +199,7 @@ CREATE TABLE PAI_REG (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE PRESENTACION (
+CREATE TABLE IF NOT EXISTS PRESENTACION (
   Pre_ID serial NOT NULL,
   Pre_Tipo varchar(10) NOT NULL,
   Pre_Cantidad integer,
@@ -212,7 +211,7 @@ CREATE TABLE PRESENTACION (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE PRODUCTOR (
+CREATE TABLE IF NOT EXISTS PRODUCTOR (
   Pro_ID serial NOT NULL,
   Pro_Nombre varchar(50) NOT NULL,
   Pro_Dir_General direcciongeneral NOT NULL
@@ -223,7 +222,7 @@ CREATE TABLE PRODUCTOR (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE PRO_MAR (
+CREATE TABLE IF NOT EXISTS PRO_MAR (
   PM_Ano integer NOT NULL,
   PM_Botellas integer NOT NULL,
   PM_Consumo_Int float NOT NULL,
@@ -236,7 +235,7 @@ CREATE TABLE PRO_MAR (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE REGION (
+CREATE TABLE IF NOT EXISTS REGION (
   Reg_ID serial NOT NULL,
   Reg_Nombre varchar(50) NOT NULL,
   Reg_Ano_Creacion integer,
@@ -251,7 +250,7 @@ CREATE TABLE REGION (
 * Fecha de Creacion: Mayo 15
 */
 
-CREATE TABLE SOLICITUD (
+CREATE TABLE IF NOT EXISTS SOLICITUD (
   Sol_ID serial NOT NULL,
   Sol_Fecha date NOT NULL,
   Sol_Resultados res_solicitud ARRAY[3] NOT NULL,
@@ -268,7 +267,7 @@ CREATE TABLE SOLICITUD (
 * Fecha de Creacion: Mayo 15
 */
 
-CREATE TABLE VARIEDAD (
+CREATE TABLE IF NOT EXISTS VARIEDAD (
   Var_ID serial NOT NULL,
   Var_Nombres varchar(50) ARRAY NOT NULL,
   Var_Tipo_Uva varchar(10) NOT NULL
@@ -279,7 +278,7 @@ CREATE TABLE VARIEDAD (
 * Fecha de Creacion: Mayo 15
 */
 
-CREATE TABLE VINEDO (
+CREATE TABLE IF NOT EXISTS VINEDO (
   Vin_ID serial NOT NULL,
   Vin_Nombre varchar(50) NOT NULL,
   Vin_Hect_Cult cultivo ARRAY,
@@ -295,7 +294,7 @@ CREATE TABLE VINEDO (
 *  Fecha de Creacion: Mayo 15
 */
 
-CREATE TABLE VISITA (
+CREATE TABLE IF NOT EXISTS VISITA (
 	Vis_Fecha date NOT NULL,
 	Vis_Beneficio text,
 	FK_Bodega integer NOT NULL,

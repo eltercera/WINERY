@@ -74,7 +74,7 @@ CREATE TYPE des_gen_region as (
  */
 CREATE TYPE tipotelefono AS ENUM ('local', 'movil', 'oficina');
 CREATE TYPE telefono as (
-  codinternacional integer,
+  codinternacional varchar(5),
   numero varchar(10),
   tipo tipotelefono,
   codarea integer

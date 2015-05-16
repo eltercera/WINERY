@@ -95,7 +95,7 @@ CREATE TYPE direcciongeneral as (
   direccion varchar(200),
   telefonos telefono[],
   web varchar(200),
-  email varchar(20)
+  email varchar(50)
 );
 
 /* NombrePersona
@@ -157,7 +157,7 @@ CREATE TYPE fase_elaboracion_vino as (
 CREATE TYPE val_fase AS ENUM ('olfativa ', 'gustativa');
 CREATE TYPE val_elemento AS ENUM ('intensidad', 'calidad');
 CREATE TYPE val_clasificacion AS ENUM ('catador', 'vino');
-CREATE TYPE Valoriacion as (
+CREATE TYPE Valoracion as (
   fase val_fase,
   elemento val_elemento,
   rango_inicial integer,

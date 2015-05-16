@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS DV_PR_V (
 CREATE TABLE IF NOT EXISTS ESCALA (
   Esc_ID serial NOT NULL,
   Esc_Tipo varchar(10) NOT NULL,
-  Esc_Lista_Valoracion fase_elaboracion_vino ARRAY
+  Esc_Lista_Valoracion Valoriacion ARRAY
 );
 
 /*

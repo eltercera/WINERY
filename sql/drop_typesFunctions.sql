@@ -23,6 +23,23 @@ DROP FUNCTION ingrediente(
   unidad varchar(10)
 );
 
+DROP FUNCTION add_ingrediente(
+  id_marca integer,
+  indice integer,
+  ing ingrediente
+);
+
+DROP FUNCTION del_ingrediente(
+  id_marca integer,
+  i_rec integer,
+  i_ing integer
+);
+
+DROP FUNCTION table_ingrediente (
+  id_marca integer,
+  indice integer
+);
+
 DROP FUNCTION receta (
   nombre varchar(50),
   t_preparacion integer,
@@ -30,6 +47,10 @@ DROP FUNCTION receta (
   preparacion text,
   descripcion text,
   imagen oid
+);
+
+DROP FUNCTION table_receta (
+  id_marca integer
 );
 
 DROP FUNCTION medida (
@@ -73,9 +94,15 @@ DROP FUNCTION  cultivo (
   hectareascultivadas float
 );
 
-DROP FUNCTION  historiabodega (
+DROP FUNCTION historiabodega (
   ano integer,
   echo text
+);
+
+DROP FUNCTION calificacion_vino (
+  nombre varchar(50),
+  valor integer,
+  ano integer
 );
 
 DROP FUNCTION  costo (

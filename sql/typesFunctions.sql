@@ -96,6 +96,55 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+/* add_ingrediente
+ * Agrega un ingredinete a una receta apartir
+ * del id de la marca y el indice de la receta
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE OR REPLACE FUNCTION add_ingrediente(
+  id_marca integer,
+  indice integer,
+  ing ingrediente
+) RETURNS void AS
+$BODY$
+DECLARE
+  rec receta;
+BEGIN
+  rec = (SELECT mar_recetas[indice] FROM marca WHERE Mar_ID = id_marca);
+  IF rec IS NULL THEN
+    RAISE EXCEPTION 'add_ingrediente -> Indice o id de marca no encontrado';
+  END IF;
+  rec.ingredientes = array_append(rec.ingredientes,ing);
+  UPDATE MARCA SET mar_recetas[indice] = rec WHERE Mar_ID = id_marca;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+/* del_ingrediente
+ * Elimina un ingredinete a de receta apartir
+ * del id de la marca, el indice de la receta
+ * y el incie el ingrediente
+ * Fecha de Creacion: 15/05/2015
+ */
+CREATE OR REPLACE FUNCTION del_ingrediente(
+  id_marca integer,
+  i_rec integer,
+  i_ing integer
+) RETURNS void AS
+$BODY$
+DECLARE
+  rec receta;
+BEGIN
+  rec = (SELECT mar_recetas[i_rec] FROM marca WHERE Mar_ID = id_marca);
+  IF rec IS NULL THEN
+    RAISE EXCEPTION 'add_ingrediente -> Indice o id de marca no encontrado';
+  END IF;
+  rec.ingredientes = array_remove(rec.ingredientes,rec.ingredientes[i_ing]);
+  UPDATE MARCA SET mar_recetas[i_rec] = rec WHERE Mar_ID = id_marca;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
 /* receta
  * Constructor de el tipo receta
  * Fecha de Creacion: 15/05/2015

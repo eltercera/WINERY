@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS CATA_PARTICIPANTE (
   CP_ID serial NOT NULL, 
   CP_FaseVisual integer NOT NULL, 
   CP_FaseOlfativa_i integer NOT NULL, 
-  CP_Fase Olfativa_c integer NOT NULL, 
+  CP_FaseOlfativa_c integer NOT NULL, 
   CP_FaseGustativa_i integer NOT NULL, 
   CP_FaseGustativa_c integer NOT NULL, 
   CP_Armonia integer NOT NULL, 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS CATA_VINO (
   CV_ID serial NOT NULL, 
   CV_FaseVisual integer NOT NULL, 
   CV__FaseOlfativa_i integer NOT NULL, 
-  CV_Fase Olfativa_c integer NOT NULL, 
+  CV_FaseOlfativa_c integer NOT NULL, 
   CV_FaseGustativa_i integer NOT NULL, 
   CV_FaseGustativa_c integer NOT NULL, 
   CV_Armonia integer NOT NULL, 
@@ -107,8 +107,8 @@ CREATE TABLE IF NOT EXISTS CATA_EXPERTA (
   CE_ID serial NOT NULL, 
   CE_Anada integer NOT NULL, 
   CE_Valoracion integer NOT NULL, 
-  FK_Marca number NOT NULL, 
-  FK_Juez number NOT NULL
+  FK_Marca integer NOT NULL, 
+  FK_Juez integer NOT NULL
 );
 
 /*
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS BODEGA (
   Bod_Historia HistoriaBodega, 
   Bod_Descripcion text NOT NULL, 
   FK_Pais integer, 
-  FK_Bodega intger, 
+  FK_Bodega integer, 
   FK_Productor integer
 );
 
@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS DV_PR_V (
 CREATE TABLE IF NOT EXISTS ESCALA (
   Esc_ID serial NOT NULL,
   Esc_Tipo varchar(10) NOT NULL,
-  Esc_Lista_Valoracion Valoriacion ARRAY
+  Esc_Lista_Valoracion Valoracion ARRAY
 );
 
 /*

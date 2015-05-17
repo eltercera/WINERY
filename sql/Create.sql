@@ -196,8 +196,8 @@ CREATE TABLE IF NOT EXISTS COMPOSICION (
 CREATE TABLE IF NOT EXISTS CLASIFICACION (
   Cla_ID serial NOT NULL,
   Cla_Nombre varchar(50) NOT NULL,
-  Cla_Nivel varchar(10) NOT NULL,
-  Cla_Volumen integer,
+  Cla_Nivel char(1) NOT NULL,
+  Cla_Volumen integer[2],
   FK_Clasificacion integer
 );
 

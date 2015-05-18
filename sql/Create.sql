@@ -48,11 +48,24 @@ CREATE TABLE IF NOT EXISTS CONSUMIDOR (
 * Fecha de creacion: Mayo 16 
 */
 
+CREATE TABLE IF NOT EXISTS COMIDA (
+  Com_ID serial NOT NULL,
+  Com_Nombre varchar(50) NOT NULL,
+  Com_Tipo varchar(10) NOT NULL,
+  Com_Descripcion text
+); 
+
+/*
+* COMIDA
+* Fecha de creacion: Mayo 17 
+*/
+
 CREATE TABLE IF NOT EXISTS CONCURSO (
   Con_ID serial NOT NULL, 
   Con_Nombre varchar(50) NOT NULL, 
   Con_Email varchar(50) NOT NULL, 
-  Con_Tipo varchar(11) NOT NULL, 
+  Con_Tipo varchar(11) NOT NULL,
+  Con_Nivel varchar(15) NOT NULL,
   Con_Condicion_Pago text NOT NULL, 
   Con_Premios Premio ARRAY NOT NULL, 
   Con_Costos Costo ARRAY NOT NULL, 
@@ -160,6 +173,35 @@ CREATE TABLE IF NOT EXISTS BODEGA (
 );
 
 /*
+* COMPOSICION
+* Fecha de Creacion: Mayo 17
+*/
+
+CREATE TABLE IF NOT EXISTS COMPOSICION (
+  Com_Porcentaje integer NOT NULL,
+  FK_Vinedo integer NOT NULL,
+  FK_Pais integer NOT NULL,
+  FK_Bodega integer NOT NULL,
+  FK_Region integer NOT NULL,
+  FK_Variedad integer NOT NULL,
+  FK_Denominacion integer NOt NULL
+);
+
+
+/*
+* CLASIFICACION
+* Fecha de Creacion: Mayo 17
+*/
+
+CREATE TABLE IF NOT EXISTS CLASIFICACION (
+  Cla_ID serial NOT NULL,
+  Cla_Nombre varchar(50) NOT NULL,
+  Cla_Nivel varchar(10) NOT NULL,
+  Cla_Volumen integer,
+  FK_Clasificacion integer
+);
+
+/*
 * DEN_VAR
 * Fecha de Creacion: Mayo 16
 */
@@ -238,6 +280,7 @@ CREATE TABLE IF NOT EXISTS INSCRIPCION_VINO (
 */
 
 CREATE TABLE IF NOT EXISTS JUEZ (
+  Jue_ID serial NOT NULL,
   FK_Catador_Consultor integer NOT NULL,
   FK_Calendario integer NOT NULL
 );
@@ -300,11 +343,11 @@ CREATE TABLE IF NOT EXISTS MARIDAJE (
 */
 
 CREATE TABLE IF NOT EXISTS MUESTRA (
-  Mus_ID serial NOT NULL,
-  Mus_Numero integer NOT NULL,
-  Mus_Anada integer NOT NULL,
-  Mus_Posicion integer,
-  Mus_Fecha_Recibo date,
+  Mue_ID serial NOT NULL,
+  Mue_Numero integer NOT NULL,
+  Mue_Anada integer NOT NULL,
+  Mue_Posicion integer,
+  Mue_Fecha_Recibo date,
   FK_Marca integer NOT NULL
 );
 
@@ -388,7 +431,7 @@ CREATE TABLE IF NOT EXISTS PRO_MAR (
   PM_Botellas integer NOT NULL,
   PM_Consumo_Int float NOT NULL,
   PM_Exportaciones exportacion ARRAY NOT NULL,
-  PM_Marca integer NOT NULL
+  FK_Marca integer NOT NULL
 );
 
 /*

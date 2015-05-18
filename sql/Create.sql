@@ -1,52 +1,52 @@
 ﻿/** DENOMINACION
 Fecha de Creacion: Mayo 16 */
 
-CREATE DENOMINACION (Den_ID serial NOT NULL, Den_Creacion date, Den_Nombre varchar(50) NOT NULL, Den_Descricion text, Den_Categoria varchar(50));
+CREATE TABLE IF NOT EXISTS DENOMINACION (Den_ID serial NOT NULL, Den_Creacion date, Den_Nombre varchar(50) NOT NULL, Den_Descricion text, Den_Categoria varchar(50));
 
 /** COSECHA
 Fecha de creacion: Mayo 16 */
 
-CREATE COSECHA (Cos_ID serial NOT NULL, Cos_Ano integer NOT NULL, Cos_Evaluacion varchar(2) NOT NULL, FK_Vinedo integer NOT NULL, FK_Bodega integer NOT NULL, FK_Pais integer NOT NULL, FK_Region integer NOT NULL, FK_Variedad integer NOT NULL, FK_Denominacion integer NOT NULL);
+CREATE TABLE IF NOT EXISTS COSECHA (Cos_ID serial NOT NULL, Cos_Ano integer NOT NULL, Cos_Evaluacion varchar(2) NOT NULL, FK_Vinedo integer NOT NULL, FK_Bodega integer NOT NULL, FK_Pais integer NOT NULL, FK_Region integer NOT NULL, FK_Variedad integer NOT NULL, FK_Denominacion integer NOT NULL);
 
 /** CONSUMIDOR
 Fecha de creacion: Mayo 16 */
 
-CREATE CONSUMIDOR (Con_ID serial NOT NULL, Con_Nombre varchar(50) NOT NULL, Con_Apellido varchar(50) NOT NULL, Con_Genero char NOT NULL, Con_Fecha_Nac date NOT NULL, FK_Lugar integer NOT NULL, Con_Direccion varchar(200) NOT NULL);
+CREATE TABLE IF NOT EXISTS CONSUMIDOR (Con_ID serial NOT NULL, Con_Nombre varchar(50) NOT NULL, Con_Apellido varchar(50) NOT NULL, Con_Genero char NOT NULL, Con_Fecha_Nac date NOT NULL, FK_Lugar integer NOT NULL, Con_Direccion varchar(200) NOT NULL);
 
 /** CONCURSO
 Fecha de creacion: Mayo 16 */
 
-CREATE CONCURSO (Con_ID serial NOT NULL, Con_Nombre varchar(50) NOT NULL, Con_Email varchar(50) NOT NULL, Con_Tipo varchar(11) NOT NULL, Con_Condicion_Pago text NOT NULL, Con_Premios Premio ARRAY NOT NULL, Con_Costos Costo ARRAY NOT NULL, FK_Escala integer NOT NULL); 
+CREATE TABLE IF NOT EXISTS CONCURSO (Con_ID serial NOT NULL, Con_Nombre varchar(50) NOT NULL, Con_Email varchar(50) NOT NULL, Con_Tipo varchar(11) NOT NULL, Con_Condicion_Pago text NOT NULL, Con_Premios Premio ARRAY NOT NULL, Con_Costos Costo ARRAY NOT NULL, FK_Escala integer NOT NULL); 
 
 /** CATA_PARTICIPANTE
 Fecha de creacion: Mayo 16 */
 
-CREATE CATA_PARTICIPANTE (CP_ID serial NOT NULL, CP_FaseVisual integer NOT NULL, CP_FaseOlfativa_i integer NOT NULL, CP_Fase Olfativa_c integer NOT NULL, CP_FaseGustativa_i integer NOT NULL, CP_FaseGustativa_c integer NOT NULL, CP_Armonia integer NOT NULL, CP_Total integer NOT NULL, CP_Observacion text, FK_Cata_Experta integer NOT NULL, FK_Calendario integer, FK_Inscripcion integer NOT NULL);
+CREATE TABLE IF NOT EXISTS CATA_PARTICIPANTE (CP_ID serial NOT NULL, CP_FaseVisual integer NOT NULL, CP_FaseOlfativa_i integer NOT NULL, CP_Fase_Olfativa_c integer NOT NULL, CP_FaseGustativa_i integer NOT NULL, CP_FaseGustativa_c integer NOT NULL, CP_Armonia integer NOT NULL, CP_Total integer NOT NULL, CP_Observacion text, FK_Cata_Experta integer NOT NULL, FK_Calendario integer, FK_Inscripcion integer NOT NULL);
 
 /** CATA_VINO
 Fecha de creacion: Mayo 16 */
 
-CREATE CATA_VINO (CV_ID serial NOT NULL, CV_FaseVisual integer NOT NULL, CV__FaseOlfativa_i integer NOT NULL, CV_Fase Olfativa_c integer NOT NULL, CV_FaseGustativa_i integer NOT NULL, CV_FaseGustativa_c integer NOT NULL, CV_Armonia integer NOT NULL, CV_Total integer NOT NULL, CV_Observacion text, FK_Juez integer NOT NULL, FK_Muestra integer NOT NULL);
+CREATE TABLE IF NOT EXISTS CATA_VINO (CV_ID serial NOT NULL, CV_FaseVisual integer NOT NULL, CV__FaseOlfativa_i integer NOT NULL, CV_Fase_Olfativa_c integer NOT NULL, CV_FaseGustativa_i integer NOT NULL, CV_FaseGustativa_c integer NOT NULL, CV_Armonia integer NOT NULL, CV_Total integer NOT NULL, CV_Observacion text, FK_Juez integer NOT NULL, FK_Muestra integer NOT NULL);
 
 /** CATA_EXPERTA
 Fecha de creacion: Mayo 16 */
 
-CREATE CATA_EXPERTA (CE_ID serial NOT NULL, CE_Anada integer NOT NULL, CE_Valoracion integer NOT NULL, FK_Marca number NOT NULL, FK_Juez number NOT NULL);
+CREATE TABLE IF NOT EXISTS CATA_EXPERTA (CE_ID serial NOT NULL, CE_Anada integer NOT NULL, CE_Valoracion integer NOT NULL, FK_Marca integer NOT NULL, FK_Juez integer NOT NULL);
 
 /** CATADOR_CONSULTOR
 Fecha de creacion: Mayo 16 */
 
-CREATE CATADOR_CONSULTOR (CC_ID serial NOT NULL, CC_Nivel varchar(50) NOT NULL, CC_Nombre varchar(50) NOT NULL, CC_Telefonos Telefono ARRAY NOT NULL, CC_Email varchar(50) NOT NULL, CC_Genero char NOT NULL, CC_Fecha_Nacimiento date NOT NULL);
+CREATE TABLE IF NOT EXISTS CATADOR_CONSULTOR (CC_ID serial NOT NULL, CC_Nivel varchar(50) NOT NULL, CC_Nombre varchar(50) NOT NULL, CC_Telefonos Telefono ARRAY NOT NULL, CC_Email varchar(50) NOT NULL, CC_Genero char NOT NULL, CC_Fecha_Nacimiento date NOT NULL);
 
 /** CALENDARIO
 Fecha de creacion: Mayo 16 */
 
-CREATE CALENDARIO (Cal_ID serial NOT NULL, Cal_FechaInicio date NOT NULL, Cal_FechaFinal date NOT NULL, Cal_FechaLimiteInscripcion date NOT NULL, Cal_Direccion DireccionGeneral NOT NULL, Cal_F_Lim_Envio_Muestras date, Cal_Edicion varchar(5), FK_Concurso integer NOT NULL);
+CREATE TABLE IF NOT EXISTS CALENDARIO (Cal_ID serial NOT NULL, Cal_FechaInicio date NOT NULL, Cal_FechaFinal date NOT NULL, Cal_FechaLimiteInscripcion date NOT NULL, Cal_Direccion DireccionGeneral NOT NULL, Cal_F_Lim_Envio_Muestras date, Cal_Edicion varchar(5), FK_Concurso integer NOT NULL);
 
 /** BODEGA
 Fecha de creacion: Mayo 16 */
 
-CREATE BODEGA (Bod_ID serial NOT NULL, Bod_Direccion text NOT NULL, Bod_Fundacion date, Bod_Dir_Tecnico varchar(50) NOT NULL, Bod_Historia HistoriaBodega, Bod_Descripcion text NOT NULL, FK_Pais integer, FK_Bodega intger, FK_Productor integer);
+CREATE TABLE IF NOT EXISTS BODEGA (Bod_ID serial NOT NULL, Bod_Direccion text NOT NULL, Bod_Fundacion date, Bod_Dir_Tecnico varchar(50) NOT NULL, Bod_Historia HistoriaBodega, Bod_Descripcion text NOT NULL, FK_Pais integer, FK_Bodega integer, FK_Productor integer);
 
 /*
 * DEN_VAR

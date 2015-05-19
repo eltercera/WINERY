@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
 * DENOMINACION
 *Fecha de Creacion: Mayo 16 
 */
@@ -234,14 +235,13 @@ CREATE TABLE IF NOT EXISTS DEN_VAR_CLA (
 );
 
 /*
-* DV_PR_V
+* DV_PR
 * Fecha de Creacion: Mayo 16
 */
 
 CREATE TABLE IF NOT EXISTS DV_PR (
   FK_Region integer NOT NULL,
   FK_Pais integer NOT NULL,
-  FK_Vinedo integer NOT NULL,
   FK_Denominacion integer NOT NULL,
   FK_Variedad integer NOT NULL
 );

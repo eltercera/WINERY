@@ -5,7 +5,7 @@
 
 CREATE TABLE IF NOT EXISTS DENOMINACION (
   Den_ID serial NOT NULL, 
-  Den_Creacion date, 
+  Den_Creacion date NOT NULL, 
   Den_Nombre varchar(50) NOT NULL, 
   Den_Descricion text, 
   Den_Categoria varchar(50)
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS CONSUMIDOR (
 );
 
 /*
-* CONCURSO
+* COMIDA
 * Fecha de creacion: Mayo 16 
 */
 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS COMIDA (
 ); 
 
 /*
-* COMIDA
+* CONCURSO
 * Fecha de creacion: Mayo 17 
 */
 
@@ -87,8 +87,11 @@ CREATE TABLE IF NOT EXISTS CATA_PARTICIPANTE (
   CP_Armonia integer NOT NULL, 
   CP_Total integer NOT NULL, 
   CP_Observacion text, 
-  FK_Cata_Experta integer NOT NULL, 
-  FK_Calendario integer, 
+  FK_Cata_Experta integer NOT NULL,
+  FK_Marca integer NOT NULL,
+  FK_Catador_Consultor integer NOT NULL,
+  FK_Calendario integer NOT NULL,
+  FK_Concurso integer NOT NULL,
   FK_Inscripcion integer NOT NULL
 );
 
@@ -100,15 +103,19 @@ CREATE TABLE IF NOT EXISTS CATA_PARTICIPANTE (
 CREATE TABLE IF NOT EXISTS CATA_VINO (
   CV_ID serial NOT NULL, 
   CV_FaseVisual integer NOT NULL, 
-  CV__FaseOlfativa_i integer NOT NULL, 
+  CV_FaseOlfativa_i integer NOT NULL, 
   CV_FaseOlfativa_c integer NOT NULL, 
   CV_FaseGustativa_i integer NOT NULL, 
   CV_FaseGustativa_c integer NOT NULL, 
   CV_Armonia integer NOT NULL, 
   CV_Total integer NOT NULL, 
   CV_Observacion text, 
-  FK_Juez integer NOT NULL, 
-  FK_Muestra integer NOT NULL
+  FK_Catador_Consultor integer NOT NULL,
+  FK_Calendario integer NOT NULL,
+  FK_Concurso integer NOT NULL,
+  FK_Muestra integer NOT NULL,
+  FK_Marca integer NOT NULL,
+  FK_Inscripcion integer NOT NULL
 );
 
 /*
@@ -121,7 +128,9 @@ CREATE TABLE IF NOT EXISTS CATA_EXPERTA (
   CE_Anada integer NOT NULL, 
   CE_Valoracion integer NOT NULL, 
   FK_Marca integer NOT NULL, 
-  FK_Juez integer NOT NULL
+  FK_Catador_Consultor integer NOT NULL,
+  FK_Calendario integer NOT NULL,
+  FK_Concurso integer NOT NULL
 );
 
 /*
@@ -165,11 +174,11 @@ CREATE TABLE IF NOT EXISTS BODEGA (
   Bod_Direccion text NOT NULL, 
   Bod_Fundacion date, 
   Bod_Dir_Tecnico varchar(50) NOT NULL, 
-  Bod_Historia HistoriaBodega, 
+  Bod_Historia HistoriaBodega ARRAY, 
   Bod_Descripcion text NOT NULL, 
-  FK_Pais integer, 
+  FK_Pais integer NOT NULL, 
   FK_Bodega integer, 
-  FK_Productor integer
+  FK_Productor integer NOT NULL
 );
 
 /*
@@ -184,7 +193,8 @@ CREATE TABLE IF NOT EXISTS COMPOSICION (
   FK_Bodega integer NOT NULL,
   FK_Region integer NOT NULL,
   FK_Variedad integer NOT NULL,
-  FK_Denominacion integer NOt NULL
+  FK_Denominacion integer NOT NULL,
+  FK_Marca integer NOT NULL
 );
 
 
@@ -228,7 +238,7 @@ CREATE TABLE IF NOT EXISTS DEN_VAR_CLA (
 * Fecha de Creacion: Mayo 16
 */
 
-CREATE TABLE IF NOT EXISTS DV_PR_V (
+CREATE TABLE IF NOT EXISTS DV_PR (
   FK_Region integer NOT NULL,
   FK_Pais integer NOT NULL,
   FK_Vinedo integer NOT NULL,
@@ -282,6 +292,7 @@ CREATE TABLE IF NOT EXISTS INSCRIPCION_VINO (
   IV_Num_Muestras integer,
   FK_Bodega integer,
   FK_Catador_Consultor integer,
+  FK_Concurso integer NOT NULL,
   FK_Calendario integer NOT NULL
 );
 
@@ -291,9 +302,9 @@ CREATE TABLE IF NOT EXISTS INSCRIPCION_VINO (
 */
 
 CREATE TABLE IF NOT EXISTS JUEZ (
-  Jue_ID serial NOT NULL,
   FK_Catador_Consultor integer NOT NULL,
-  FK_Calendario integer NOT NULL
+  FK_Calendario integer NOT NULL,
+  FK_Concurso integer NOT NULL
 );
 
 /*
@@ -320,7 +331,7 @@ CREATE TABLE IF NOT EXISTS MARCA (
   Mar_ID serial NOT NULL,
   Mar_Descripcion text NOT NULL,
   Mar_Nombre varchar(50) NOT NULL,
-  /* Mar_Des_Cata des_cata ARRAY NOT NULL,*/
+  /*Mar_Des_Cata des_cata ARRAY NOT NULL,*/
   Mar_Elaboracion fase_elaboracion_vino ARRAY,
   Mar_Temp_Servicio float NOT NULL,
   Mar_Maduracion integer NOT NULL,
@@ -332,8 +343,8 @@ CREATE TABLE IF NOT EXISTS MARCA (
   Mar_Tipo_Tapa varchar(10) NOT NULL,
   Mar_Recetas receta ARRAY,
   Mar_Calificaciones calificacion_vino ARRAY,
-  FK_Clasificacion integer,
-  FK_Bodega integer
+  FK_Clasificacion integer NOT NULL,
+  FK_Bodega integer NOT NULL
 );
 
 
@@ -359,6 +370,7 @@ CREATE TABLE IF NOT EXISTS MUESTRA (
   Mue_Anada integer NOT NULL,
   Mue_Posicion integer,
   Mue_Fecha_Recibo date,
+  FK_Inscripcion integer NOT NULL,
   FK_Marca integer NOT NULL
 );
 
@@ -498,8 +510,8 @@ CREATE TABLE IF NOT EXISTS VINEDO (
   Vin_Nombre varchar(50) NOT NULL,
   Vin_Hect_Cult cultivo ARRAY,
   FK_Pais integer NOT NULL,
-  FK_Bodega integer NOT NULL,
   FK_Region integer NOT NULL,
+  FK_Bodega integer NOT NULL,
   FK_Variedad integer NOT NULL,
   FK_Denominacion integer NOT NULL
 );
@@ -513,5 +525,5 @@ CREATE TABLE IF NOT EXISTS VISITA (
 	Vis_Fecha date NOT NULL,
 	Vis_Beneficio text,
 	FK_Bodega integer NOT NULL,
-	fk_Solicitud integer NOT NULL
+	FK_Solicitud integer NOT NULL
 );

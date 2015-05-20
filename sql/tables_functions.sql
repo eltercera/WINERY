@@ -58,6 +58,10 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* table_exportacion
+ * A partir de un array de exportaciones obtiene la tabla de exportaciones
+ * Fecha de Creacion: 19/05/2015
+ */
 CREATE OR REPLACE FUNCTION table_exportacion (
   expor exportacion[]
 ) RETURNS TABLE(
@@ -68,5 +72,25 @@ CREATE OR REPLACE FUNCTION table_exportacion (
 $BODY$
   SELECT row_number() OVER () as index, pais, cantidadbotella as botellas 
   FROM unnest(expor);
+$BODY$
+LANGUAGE sql;
+
+/* table_legislacion
+ * A partir de un id de pais obtiene la tabla de legislaciones
+ * Fecha de Creacion: 19/05/2015
+ */
+CREATE OR REPLACE FUNCTION table_legislacion (
+  id_pais integer
+) RETURNS TABLE(
+  index bigint,
+  nombre varchar(50),
+  ano integer,
+  tipo tipolegislacion,
+  descripcion text,
+  documento oid
+) AS
+$BODY$
+  SELECT row_number() OVER () as index, nombre, ano, tipo, descripcion, documento
+  FROM unnest((SELECT Pai_Legislaciones FROM PAIS WHERE Pai_ID = id_pais));
 $BODY$
 LANGUAGE sql;

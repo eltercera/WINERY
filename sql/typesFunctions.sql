@@ -125,6 +125,52 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+/* add_legislacion
+ * agrega Una legislacion a un pais
+ * Fecha de Creacion:
+ */
+CREATE OR REPLACE FUNCTION add_legislacion (
+  id_pais integer,
+  leg legislacion
+) RETURNS void AS
+$BODY$
+DECLARE
+  newdata legislacion[];
+BEGIN
+  SELECT INTO newdata Pai_Legislaciones FROM PAIS WHERE Pai_ID = id_pais;
+  IF NOT FOUND THEN
+    RAISE NOTICE 'IDENTIFICADOR % de pais no encontrado',id_pais;
+  ELSE
+    UPDATE PAIS SET Pai_Legislaciones = array_append(Pai_Legislaciones,leg) WHERE Pai_ID = id_pais;
+  END IF;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+/* del_legislacion
+ * elimina la informacion de ina legislacion a un pais
+ * Fecha de Creacion:
+ */
+CREATE OR REPLACE FUNCTION del_legislacion (
+  id_pais integer,
+  ind integer
+) RETURNS void AS
+$BODY$
+DECLARE
+  legs legislacion[];
+BEGIN
+  SELECT INTO legs Pai_Legislaciones FROM PAIS WHERE Pai_ID = id_pais;
+  IF NOT FOUND THEN
+    RAISE NOTICE 'IDENTIFICADOR % de pais no encontrado',id_pais;
+  ELSE
+    legs = array_remove(legs,legs[ind]);
+    UPDATE PAIS SET Pai_Legislaciones = legs WHERE Pai_ID = id_pais;
+  END IF;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+
 /* ingrediente
  * Constructor de el tipo ingrediente
  * Fecha de Creacion: 15/05/2015

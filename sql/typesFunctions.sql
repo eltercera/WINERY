@@ -1,4 +1,19 @@
 
+/* pais_valido
+ * Valida si el pais se encuentra en la tabla lugar
+ */
+
+CREATE OR REPLACE FUNCTION pais_valido (
+  nombre varchar(50)
+) RETURNS boolean AS
+$BODY$
+BEGIN
+  RETURN (EXISTS(SELECT Lug_ID FROM Lugar WHERE UPPER(Lug_Nombre) = UPPER(nombre)));
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+
 /* suelo
  * Constructor de el tipo Suelo
  * Fecha de Creacion: 15/05/2015
@@ -45,6 +60,44 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
+
+/* add_exportacion
+ * A partir de un año, y marca, pais e botellas exportadas
+ * agrega su respectivo registro-
+ * Fecha de Creacion: 19/05/2015
+ */
+CREATE OR REPLACE FUNCTION add_exportacion (
+  id_marca integer,
+  ano integer,
+  pais_n varchar(50),
+  botellas integer
+) RETURNS void AS
+$BODY$
+DECLARE
+  exs exportacion[];
+BEGIN
+  IF botellas > 0 THEN
+    SELECT INTO exs pm_exportaciones FROM PRO_MAR WHERE pm_ano=ano AND fk_marca=id_marca;
+    IF FOUND THEN
+      IF NOT EXISTS ( SELECT pais from table_exportacion(exs) WHERE UPPER(pais_n)=UPPER(pais)) THEN
+        IF pais_valido(pais_n) THEN
+          exs = array_append(exs,exportacion(botellas,pais_n));
+          UPDATE PRO_MAR SET pm_exportaciones = exs WHERE pm_ano=ano AND fk_marca=id_marca;
+        ELSE
+          RAISE 'Pais % no es Valido', pais_n;
+        END IF;
+      ELSE
+        RAISE 'Pais % ya aparece', pais_n;
+      END IF;
+    ELSE
+      RAISE 'Producción par el año % no existe de la marca ID %', ano, id_marca;
+    END IF;
+  END IF;
+END;
+$BODY$
+LANGUAGE plpgsql;
+ 
+ 
 
 /* legislacion
  * Constructor de el tipo legislacion

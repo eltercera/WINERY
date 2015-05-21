@@ -1,6 +1,21 @@
+
+/* pais_valido
+ * Valida si el pais se encuentra en la tabla lugar
+ */
+
+CREATE OR REPLACE FUNCTION pais_valido (
+  nombre varchar(50)
+) RETURNS boolean AS
+$BODY$
+BEGIN
+  RETURN (EXISTS(SELECT Lug_ID FROM Lugar WHERE UPPER(Lug_Nombre) = UPPER(nombre)));
+END;
+$BODY$
+LANGUAGE plpgsql;
+
 /* validar_mayor_edad
  * A partir de una fecha calcula si es mayor de edad
- */
+ 
 CREATE OR REPLACE FUNCTION validar_mayor_edad (
   f_nac date,
   c_date date = current_date
@@ -10,7 +25,7 @@ BEGIN
   RETURN (age(f_nac) >= interval '18 years');
 END;
 $BODY$
-LANGUAGE plpgsql;
+LANGUAGE plpgsql;*/
 
 
 /* validar_anada

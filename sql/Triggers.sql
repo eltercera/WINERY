@@ -170,7 +170,7 @@ FOR EACH ROW EXECUTE PROCEDURE tgg_visita_Validar_fecha();
  * ON: INSERT UPDATE Con_fecha_Nac
  * EACH: ROW
  * Valida que el consumidor sea mayor de edad 
- */
+ 
 CREATE OR REPLACE FUNCTION tgg_consumidor_fecha_Nac ()
 RETURNS trigger AS
 $tgg_consumidor_fecha_Nac$
@@ -187,7 +187,7 @@ LANGUAGE plpgsql;
 CREATE TRIGGER tgg_consumidor_fecha_Nac
 BEFORE INSERT OR UPDATE OF Con_Fecha_Nac
 ON CONSUMIDOR
-FOR EACH ROW EXECUTE PROCEDURE tgg_consumidor_fecha_Nac();
+FOR EACH ROW EXECUTE PROCEDURE tgg_consumidor_fecha_Nac();*/
 
 
 
@@ -199,7 +199,7 @@ FOR EACH ROW EXECUTE PROCEDURE tgg_consumidor_fecha_Nac();
  * ON: INSERT UPDATE CC_Fecha_Nacimiento
  * EACH: ROW
  * Valida que el Catador sea mayor de edad 
- */
+ 
 CREATE OR REPLACE FUNCTION tgg_catador_consultor_fecha_nacimiento ()
 RETURNS trigger AS
 $tgg_catador_consultor_fecha_nacimiento$
@@ -216,7 +216,7 @@ LANGUAGE plpgsql;
 CREATE TRIGGER tgg_catador_consultor_fecha_nacimiento
 BEFORE INSERT OR UPDATE OF CC_Fecha_Nacimiento
 ON CATADOR_CONSULTOR
-FOR EACH ROW EXECUTE PROCEDURE tgg_catador_consultor_fecha_nacimiento();
+FOR EACH ROW EXECUTE PROCEDURE tgg_catador_consultor_fecha_nacimiento();*/
  
  
 /* tgg_presentacion_f_valoracion

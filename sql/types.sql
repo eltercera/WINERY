@@ -145,10 +145,15 @@ CREATE TYPE costo as (
 /* Fase_Elaboracion_Vino
  * Fecha de Creacion: 15/05/2015
  */
-CREATE TYPE fas_ela_vin AS ENUM ('plantación', 'espera', 'vendimia', 'prensado','fermentación','maruración','filtrado','embotellamiento');
 CREATE TYPE fase_elaboracion_vino as (
-  secuencia fas_ela_vin,
-  detalles text
+  plantacion text,
+  espera text,
+  vendimia text,
+  prensado text,
+  fermentacion text,
+  maruracion text,
+  filtrado text,
+  embotellamiento text
 );
 
 /* Valoriacion
@@ -175,4 +180,14 @@ CREATE TYPE premio as (
   reconocimiento pro_reco,
   valor_reco integer,
   descripcion text
+);
+
+
+/* des_cata
+ * Fecha de Creacion: 20/05/2015
+ */
+CREATE TYPE des_cata as (
+  visual text,
+  aroma text,
+  boca text
 );

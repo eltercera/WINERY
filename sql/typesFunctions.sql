@@ -1,21 +1,6 @@
 
-/* pais_valido
- * Valida si el pais se encuentra en la tabla lugar
- */
-
-CREATE OR REPLACE FUNCTION pais_valido (
-  nombre varchar(50)
-) RETURNS boolean AS
-$BODY$
-BEGIN
-  RETURN (EXISTS(SELECT Lug_ID FROM Lugar WHERE UPPER(Lug_Nombre) = UPPER(nombre)));
-END;
-$BODY$
-LANGUAGE plpgsql;
-
-
 /* suelo
- * Constructor de el tipo Suelo
+ * Constructor tipo Suelo
  * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION suelo (
@@ -39,7 +24,7 @@ LANGUAGE plpgsql;
 
 
 /* exportacion
- * Constructor de el tipo exportacion
+ * Constructor tipo exportacion
  * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION exportacion (
@@ -62,7 +47,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 /* add_exportacion
- * A partir de un año, y marca, pais e botellas exportadas
+ * A partir de un año, y id_marca, pais e botellas exportadas
  * agrega su respectivo registro-
  * Fecha de Creacion: 19/05/2015
  */
@@ -96,8 +81,30 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
- 
- 
+
+/* del_legislacion
+ * elimina la informacion de ina legislacion a un pais
+ * Fecha de Creacion:
+ */
+CREATE OR REPLACE FUNCTION del_legislacion (
+  id_pais integer,
+  ind integer
+) RETURNS void AS
+$BODY$
+DECLARE
+  legs legislacion[];
+BEGIN
+  SELECT INTO legs Pai_Legislaciones FROM PAIS WHERE Pai_ID = id_pais;
+  IF NOT FOUND THEN
+    RAISE NOTICE 'IDENTIFICADOR % de pais no encontrado',id_pais;
+  ELSE
+    legs = array_remove(legs,legs[ind]);
+    UPDATE PAIS SET Pai_Legislaciones = legs WHERE Pai_ID = id_pais;
+  END IF;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
 
 /* legislacion
  * Constructor de el tipo legislacion
@@ -134,18 +141,9 @@ CREATE OR REPLACE FUNCTION add_legislacion (
   leg legislacion
 ) RETURNS void AS
 $BODY$
-DECLARE
-  newdata legislacion[];
-BEGIN
-  SELECT INTO newdata Pai_Legislaciones FROM PAIS WHERE Pai_ID = id_pais;
-  IF NOT FOUND THEN
-    RAISE NOTICE 'IDENTIFICADOR % de pais no encontrado',id_pais;
-  ELSE
-    UPDATE PAIS SET Pai_Legislaciones = array_append(Pai_Legislaciones,leg) WHERE Pai_ID = id_pais;
-  END IF;
-END;
+  UPDATE PAIS SET Pai_Legislaciones = array_append(Pai_Legislaciones,leg) WHERE Pai_ID = id_pais;
 $BODY$
-LANGUAGE plpgsql;
+LANGUAGE sql;
 
 /* del_legislacion
  * elimina la informacion de ina legislacion a un pais
@@ -206,18 +204,9 @@ CREATE OR REPLACE FUNCTION add_ingrediente(
   ing ingrediente
 ) RETURNS void AS
 $BODY$
-DECLARE
-  rec receta;
-BEGIN
-  rec = (SELECT mar_recetas[indice] FROM marca WHERE Mar_ID = id_marca);
-  IF rec IS NULL THEN
-    RAISE EXCEPTION 'add_ingrediente -> Indice o id de marca no encontrado';
-  END IF;
-  rec.ingredientes = array_append(rec.ingredientes,ing);
-  UPDATE MARCA SET mar_recetas[indice] = rec WHERE Mar_ID = id_marca;
-END;
+  UPDATE MARCA SET mar_recetas[indice].ingredientes = array_append(mar_recetas[indice].ingredientes,ing) WHERE Mar_ID = id_marca;
 $BODY$
-LANGUAGE plpgsql;
+LANGUAGE sql;
 
 /* del_ingrediente
  * Elimina un ingredinete a de receta apartir
@@ -231,18 +220,9 @@ CREATE OR REPLACE FUNCTION del_ingrediente(
   i_ing integer
 ) RETURNS void AS
 $BODY$
-DECLARE
-  rec receta;
-BEGIN
-  rec = (SELECT mar_recetas[i_rec] FROM marca WHERE Mar_ID = id_marca);
-  IF rec IS NULL THEN
-    RAISE EXCEPTION 'add_ingrediente -> Indice o id de marca no encontrado';
-  END IF;
-  rec.ingredientes = array_remove(rec.ingredientes,rec.ingredientes[i_ing]);
-  UPDATE MARCA SET mar_recetas[i_rec] = rec WHERE Mar_ID = id_marca;
-END;
+  UPDATE MARCA SET mar_recetas[i_rec].ingredientes = array_remove(mar_recetas[i_rec].ingredientes,mar_recetas[i_rec].ingredientes[i_ing]) WHERE Mar_ID = id_marca;
 $BODY$
-LANGUAGE plpgsql;
+LANGUAGE sql;
 
 /* receta
  * Constructor de el tipo receta
@@ -274,6 +254,24 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION add_receta(
+  id_marca integer,
+  m receta
+) RETURNS void AS
+$BODY$
+  UPDATE MARCA SET mar_recetas = array_append(mar_recetas,m) WHERE Mar_ID = id_marca;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION del_receta(
+  id_marca integer,
+  ind integer
+) RETURNS void 	AS
+$BODY$
+  UPDATE MARCA SET mar_recetas = array_remove(mar_recetas,mar_recetas[ind]) WHERE Mar_ID = id_marca;
+$BODY$
+LANGUAGE sql;
 
 /* Medida
  * Constructor de el tipo Medida
@@ -320,6 +318,78 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION add_temperatura(
+  id_region integer,
+  m medida
+) RETURNS void AS
+$BODY$
+  UPDATE REGION SET reg_descripcion_general.temperaturas = array_append((reg_descripcion_general).temperaturas,m) WHERE Reg_ID = id_region;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION del_temperatura(
+  id_region integer,
+  ind integer
+) RETURNS void 	AS
+$BODY$
+  UPDATE REGION SET reg_descripcion_general.temperaturas = array_remove((reg_descripcion_general).temperaturas,(reg_descripcion_general).temperaturas[ind]) WHERE Reg_ID = id_region;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION add_presipitaciones(
+  id_region integer,
+  m medida
+) RETURNS void AS
+$BODY$
+  UPDATE REGION SET reg_descripcion_general.presipitaciones = array_append((reg_descripcion_general).presipitaciones,m) WHERE Reg_ID = id_region;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION del_presipitaciones(
+  id_region integer,
+  ind integer
+) RETURNS void 	AS
+$BODY$
+  UPDATE REGION SET reg_descripcion_general.presipitaciones = array_remove((reg_descripcion_general).presipitaciones,(reg_descripcion_general).presipitaciones[ind]) WHERE Reg_ID = id_region;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION add_riesgo(
+  id_region integer,
+  r varchar(100)
+) RETURNS void AS
+$BODY$
+  UPDATE REGION SET reg_descripcion_general.riesgos_vina = array_append((reg_descripcion_general).riesgos_vina,r) WHERE Reg_ID = id_region;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION del_riesgo(
+  id_region integer,
+  ind integer
+) RETURNS void 	AS
+$BODY$
+  UPDATE REGION SET Reg_Descripcion_General.riesgos_vina = array_remove((reg_descripcion_general).riesgos_vina,(reg_descripcion_general).riesgos_vina[ind]) WHERE Reg_ID = id_region;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION add_suelo(
+  id_region integer,
+  s suelo
+) RETURNS void AS
+$BODY$
+  UPDATE REGION SET reg_descripcion_general.suelos = array_append((reg_descripcion_general).suelos,s) WHERE Reg_ID = id_region;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION del_suelo(
+  id_region integer,
+  ind integer
+) RETURNS void 	AS
+$BODY$
+  UPDATE REGION SET Reg_Descripcion_General.suelos = array_remove((reg_descripcion_general).suelos,(reg_descripcion_general).suelos[ind]) WHERE Reg_ID = id_region;
+$BODY$
+LANGUAGE sql;
 
 /* telefono
  * Constructor de el tipo telefono
@@ -446,6 +516,26 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION add_cultivo (
+  id_vinedo integer,
+  c cultivo
+) RETURNS void AS
+$BODY$
+  UPDATE VINEDO SET Vin_Hect_Cult = array_append(Vin_Hect_Cult,c) WHERE Vin_ID = id_vinedo;
+END;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION del_cultivo(
+  id_vinedo integer,
+  ind integer
+) RETURNS void 	AS
+$BODY$
+  UPDATE VINEDO SET Vin_Hect_Cult = array_remove(Vin_Hect_Cult,Vin_Hect_Cult[ind])  WHERE Vin_ID = id_vinedo;
+$BODY$
+LANGUAGE sql;
+
+
 /* historiabodega
  * Constructor de el tipo historiabodega
  * Fecha de Creacion: 16/05/2015
@@ -468,6 +558,25 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION add_historia (
+  id_bodega integer,
+  h historiabodega
+) RETURNS void AS
+$BODY$
+    UPDATE BODEGA SET Bod_Historia = array_append(Bod_Historia,h) WHERE Bod_ID = id_bodega;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION del_historia(
+  id_bodega integer,
+  ind integer
+) RETURNS void 	AS
+$BODY$
+  UPDATE BODEGA SET Bod_Historia = array_remove(Bod_Historia,Bod_Historia[ind])  WHERE Bod_ID = id_bodega;
+$BODY$
+LANGUAGE sql;
 
 /* calificacion_vino
  * Constructor de el tipo calificacion_vino
@@ -497,6 +606,26 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION add_calificacion (
+  id_marca integer,
+  h calificacion_vino
+) RETURNS void AS
+$BODY$
+    UPDATE MARCA SET Mar_Calificaciones = array_append(Mar_Calificaciones,h) WHERE Mar_ID = id_marca;
+$BODY$
+LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION del_calificacion(
+  id_marca integer,
+  ind integer
+) RETURNS void 	AS
+$BODY$
+  UPDATE MARCA SET Mar_Calificaciones = array_remove(Mar_Calificaciones,Mar_Calificaciones[ind]) WHERE Mar_ID = id_marca;
+$BODY$
+LANGUAGE sql;
+
+
+
 /* costo
  * Constructor de el tipo costo
  * Fecha de Creacion: 16/05/2015
@@ -519,29 +648,6 @@ BEGIN
     END IF;
   ELSE
     RAISE 'costo -> Datos incompletos.';
-  END IF;
-  RETURN newdata;
-END;
-$BODY$
-LANGUAGE plpgsql;
-
-/* fase_elaboracion_vino
- * Constructor de el tipo fase_elaboracion_vino
- * Fecha de Creacion: 16/05/2015
- */
-CREATE OR REPLACE FUNCTION fase_elaboracion_vino (
-  secuencia fas_ela_vin,
-  detalles text
-) RETURNS fase_elaboracion_vino AS
-$BODY$
-DECLARE
-  newdata fase_elaboracion_vino;
-BEGIN
-  newdata = NULL;
-  IF secuencia IS NOT NULL AND detalles <> '' THEN
-    newdata = (secuencia,detalles);
-  ELSE
-    RAISE 'fase_elaboracion_vino -> Datos incompletos.';
   END IF;
   RETURN newdata;
 END;

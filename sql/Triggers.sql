@@ -32,9 +32,6 @@ BEFORE INSERT OR UPDATE
 ON PRO_MAR
 FOR EACH ROW EXECUTE PROCEDURE tgg_pro_mar_cal_interno();
 
-
-
-
 /* tgg_solicitud_experto
  * Tabla: SOLICITUD
  * Columna: FK_Catador_Consultor
@@ -162,7 +159,7 @@ FOR EACH ROW EXECUTE PROCEDURE tgg_visita_Validar_fecha();
 
 
 
-/* tgg_consumidor_mayoredad <------------------- Puede que este de mas
+/* tgg_consumidor_mayoredad 
  * Valida que el consumidor sea mayor de edad 
  * Tabla: CONSUMIDOR
  * Columna: Con_fecha_Nac
@@ -191,7 +188,7 @@ FOR EACH ROW EXECUTE PROCEDURE tgg_consumidor_fecha_Nac();*/
 
 
 
-/* tgg_catador_consultor_mayoredad  <------------------- Puede que este de mas
+/* tgg_catador_consultor_mayoredad  
  * Valida que el catador sea mayor de edad 
  * Tabla: CONSUMIDOR
  * Columna: Con_fecha_Nac
@@ -245,8 +242,6 @@ BEFORE INSERT OR UPDATE OF Sol_Fecha_Valoracion
 ON SOLICITUD
 FOR EACH ROW EXECUTE PROCEDURE tgg_presentacion_f_valoracion();
 
-
-
 /* tgg_his_presentacion_validar_anada
  * Tabla: HIS_PRESENTACION
  * Columna: ano  ---> falta
@@ -259,7 +254,7 @@ CREATE OR REPLACE FUNCTION tgg_his_presentacion_validar_anada ()
 RETURNS trigger AS
 $tgg_his_presentacion_validar_anada$
 BEGIN
-  IF validar_anada(NEW.FK_Marca,NEW.HP_ano) THEN
+  IF validar_anada(NEW.FK_Marca,NEW.HP_ano,TRUE) THEN
     RETURN NEW;
   END IF;
   RAISE NOTICE 'Añada invalida.';
@@ -269,15 +264,13 @@ $tgg_his_presentacion_validar_anada$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER tgg_his_presentacion_validar_anada
-BEFORE INSERT OR UPDATE OF HP_Ano
+BEFORE UPDATE OF HP_Ano
 ON HIS_PRESENTACION
 FOR EACH ROW EXECUTE PROCEDURE tgg_his_presentacion_validar_anada();
 
-
-
 /* tgg_pro_mar_validar_anada
  * Tabla: PRO_MAR
- * Columna: ano  ---> falta
+ * Columna: ano 
  * Cuando: Antes
  * ON: INSERT UPDATE
  * EACH: ROW
@@ -287,7 +280,7 @@ CREATE OR REPLACE FUNCTION tgg_pro_mar_validar_anada ()
 RETURNS trigger AS
 $tgg_pro_mar_validar_anada$
 BEGIN
-  IF validar_anada(NEW.FK_Marca,NEW.PM_ano) THEN
+  IF validar_anada(NEW.FK_Marca,NEW.PM_ano,TRUE) THEN
     RETURN NEW;
   END IF;
   RAISE NOTICE 'Añada invalida.';
@@ -297,7 +290,89 @@ $tgg_pro_mar_validar_anada$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER tgg_pro_mar_validar_anada
-BEFORE INSERT OR UPDATE OF PM_Ano
+BEFORE UPDATE OF PM_Ano
 ON PRO_MAR
 FOR EACH ROW EXECUTE PROCEDURE tgg_pro_mar_validar_anada();
+
+
+
+/* tgg_auto_cos_pro_mar_his_pre
+ * Al ingresarse una cosecha con su evaluacion,
+ * crea los respectivos registros en pro_mar, His_presentacion
+ * Solo si todas las cosesas para ese año existen y son buenas. 
+ */
+CREATE OR REPLACE FUNCTION tgg_auto_cos_pro_mar_his_pre ()
+RETURNS trigger AS
+$tgg_auto_cos_pro_mar_his_pre$
+DECLARE
+  rrow RECORD;
+  valid boolean;
+BEGIN
+  IF TG_WHEN = 'BEFORE' THEN
+    RAISE NOTICE 'Before';
+    IF EXISTS(SELECT * FROM table_cultivo(NEW.FK_Vinedo) WHERE ano = NEW.Cos_ano and hectareascultivadas > 0) THEN
+      RETURN NEW;
+    END IF;
+    RETURN NULL;
+  ELSE
+    valid = TRUE;
+    FOR rrow IN SELECT DISTINCT(FK_MARCA) FROM COMPOSICION WHERE FK_Vinedo = NEW.FK_Vinedo LOOP
+      RAISE NOTICE 'MArca %',rrow.FK_Marca;
+      IF NOT validar_anada(rrow.FK_Marca,NEW.Cos_ano,FALSE) THEN
+        valid = FALSE
+        EXIT;
+      END IF;
+    END LOOP;
+    IF valid THEN
+      INSERT INTO PRO_MAR VALUES (NEW.Cos_ano, 0, 0,ARRAY[]::exportacion[],rrow.FK_Marca);
+      /*Falta la insercion en HIS_PRESEINTACION */
+    END IF;
+    RETURN NEW;
+  END IF;
+END;
+$tgg_auto_cos_pro_mar_his_pre$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tgg_auto_cos_pro_mar_his_pre_b
+BEFORE INSERT 
+ON COSECHA
+FOR EACH ROW EXECUTE PROCEDURE tgg_auto_cos_pro_mar_his_pre();
+
+CREATE TRIGGER tgg_auto_cos_pro_mar_his_pre_a
+AFTER INSERT
+ON COSECHA
+FOR EACH ROW EXECUTE PROCEDURE tgg_auto_cos_pro_mar_his_pre();
+ 
+
+/* tgg_pais_validar_pais
+ * Tabla: PAIS
+ * Columna:
+ * Cuando: Antes
+ * ON: INSERT UPDATE
+ * EACH: ROW
+ * Validar que el pais se encuentra en la tabla lugar con su respectivo
+ * continente
+ */
+CREATE OR REPLACE FUNCTION tgg_pais_validar_pais ()
+RETURNS trigger AS
+$tgg_pais_validar_pais$
+DECLARE
+	reg varchar(10);
+BEGIN
+  SELECT INTO reg Lug_Moneda FROM LUGAR WHERE UPPER(Lug_Nombre) = UPPER(NEW.Pai_Nombre) AND Lug_Continente = NEW.Pai_Continente;
+  IF FOUND THEN
+	NEW.Pai_Moneda = reg;
+    RETURN NEW;
+  END IF;
+  RAISE NOTICE 'País Invalido.';
+  RETURN NULL;
+END;
+$tgg_pais_validar_pais$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tgg_pais_validar_pais
+BEFORE INSERT OR UPDATE
+ON PAIS
+FOR EACH ROW EXECUTE PROCEDURE tgg_pais_validar_pais();
+
 

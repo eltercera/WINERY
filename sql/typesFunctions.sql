@@ -1,7 +1,6 @@
 
 /* suelo
  * Constructor tipo Suelo
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION suelo (
   nombre varchar(25) ,
@@ -25,7 +24,6 @@ LANGUAGE plpgsql;
 
 /* exportacion
  * Constructor tipo exportacion
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION exportacion (
   cantidadbotella integer,
@@ -48,8 +46,7 @@ LANGUAGE plpgsql;
 
 /* add_exportacion
  * A partir de un año, y id_marca, pais e botellas exportadas
- * agrega su respectivo registro-
- * Fecha de Creacion: 19/05/2015
+ * agrega su respectivo registro
  */
 CREATE OR REPLACE FUNCTION add_exportacion (
   id_marca integer,
@@ -84,7 +81,6 @@ LANGUAGE plpgsql;
 
 /* del_legislacion
  * elimina la informacion de ina legislacion a un pais
- * Fecha de Creacion:
  */
 CREATE OR REPLACE FUNCTION del_legislacion (
   id_pais integer,
@@ -108,7 +104,6 @@ LANGUAGE plpgsql;
 
 /* legislacion
  * Constructor de el tipo legislacion
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION legislacion (
   nombre varchar(50),
@@ -134,7 +129,6 @@ LANGUAGE plpgsql;
 
 /* add_legislacion
  * agrega Una legislacion a un pais
- * Fecha de Creacion:
  */
 CREATE OR REPLACE FUNCTION add_legislacion (
   id_pais integer,
@@ -147,7 +141,6 @@ LANGUAGE sql;
 
 /* del_legislacion
  * elimina la informacion de ina legislacion a un pais
- * Fecha de Creacion:
  */
 CREATE OR REPLACE FUNCTION del_legislacion (
   id_pais integer,
@@ -171,7 +164,6 @@ LANGUAGE plpgsql;
 
 /* ingrediente
  * Constructor de el tipo ingrediente
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION ingrediente(
   nombre varchar(50),
@@ -196,7 +188,6 @@ LANGUAGE plpgsql;
 /* add_ingrediente
  * Agrega un ingredinete a una receta apartir
  * del id de la marca y el indice de la receta
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION add_ingrediente(
   id_marca integer,
@@ -212,7 +203,6 @@ LANGUAGE sql;
  * Elimina un ingredinete a de receta apartir
  * del id de la marca, el indice de la receta
  * y el incie el ingrediente
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION del_ingrediente(
   id_marca integer,
@@ -226,7 +216,6 @@ LANGUAGE sql;
 
 /* receta
  * Constructor de el tipo receta
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION receta (
   nombre varchar(50),
@@ -275,7 +264,6 @@ LANGUAGE sql;
 
 /* Medida
  * Constructor de el tipo Medida
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION medida (
   unidad varchar(5),
@@ -300,7 +288,6 @@ LANGUAGE plpgsql;
 
 /* des_gen_region
  * Constructor de el tipo des_gen_region
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION des_gen_region (
   altitud float = null
@@ -393,7 +380,6 @@ LANGUAGE sql;
 
 /* telefono
  * Constructor de el tipo telefono
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION telefono (
   codinternacional integer,
@@ -418,7 +404,6 @@ LANGUAGE plpgsql;
 
 /* res_solicitud
  * Constructor de el tipo res_solicitud
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION res_solicitud (
   idvino integer,
@@ -450,7 +435,6 @@ LANGUAGE plpgsql;
 
 /* direcciongeneral
  * Constructor de el tipo direcciongeneral
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION direcciongeneral (
   direccion varchar(200) = NULL,
@@ -466,7 +450,6 @@ LANGUAGE plpgsql;
 
 /* nombrepersona
  * Constructor de el tipo nombrepersona
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION nombrepersona (
   nombre varchar(25),
@@ -491,7 +474,6 @@ LANGUAGE plpgsql;
 
 /* cultivo
  * Constructor de el tipo cultivo
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION cultivo (
   ano integer,
@@ -522,7 +504,6 @@ CREATE OR REPLACE FUNCTION add_cultivo (
 ) RETURNS void AS
 $BODY$
   UPDATE VINEDO SET Vin_Hect_Cult = array_append(Vin_Hect_Cult,c) WHERE Vin_ID = id_vinedo;
-END;
 $BODY$
 LANGUAGE sql;
 
@@ -538,7 +519,6 @@ LANGUAGE sql;
 
 /* historiabodega
  * Constructor de el tipo historiabodega
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION historiabodega (
   ano integer,
@@ -580,7 +560,6 @@ LANGUAGE sql;
 
 /* calificacion_vino
  * Constructor de el tipo calificacion_vino
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION calificacion_vino (
   nombre varchar(50),
@@ -593,7 +572,7 @@ DECLARE
 BEGIN
   newdata = NULL;
   IF valor IS NOT NULL AND ano IS NOT NULL AND nombre <> '' THEN
-    IF ano > 0 THEN
+    IF ano > 0 and valor >=  0 AND valor <= 100THEN
       newdata = (nombre,valor,ano);
     ELSE
       RAISE 'calificacion_vino -> Año Invalido.';
@@ -624,11 +603,8 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
-
-
 /* costo
  * Constructor de el tipo costo
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION costo (
   cant_muestas integer,
@@ -656,7 +632,6 @@ LANGUAGE plpgsql;
 
 /* Valoracion
  * Constructor de el tipo Valoracion
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION Valoracion (
   fase val_fase,
@@ -682,7 +657,6 @@ LANGUAGE plpgsql;
 
 /* premio
  * Constructor de el tipo premio
- * Fecha de Creacion: 16/05/2015
  */
 CREATE OR REPLACE FUNCTION premio (
   cant_dinero float,

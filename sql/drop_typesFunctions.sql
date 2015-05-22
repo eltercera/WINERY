@@ -133,3 +133,59 @@ DROP FUNCTION premio (
   valor_reco integer,
   descripcion text
 );
+
+
+
+DROP FUNCTION add_den_var(
+  v_nombre varchar(50),
+  d_nombre varchar(50),
+  v_tipo varchar(10),
+  d_descripcion text,
+  d_creacion date,
+  d_cat varchar(50)
+);
+
+DROP FUNCTION add_exportacion (
+  id_marca integer,
+  ano integer,
+  pais_n varchar(50),
+  botellas integer
+);
+
+DROP FUNCTION add_legislacion (
+  id_pais integer,
+  leg legislacion
+);
+
+DROP FUNCTION del_legislacion (
+  id_pais integer,
+  ind integer
+);
+
+DROP FUNCTION pais_valido (
+  nombre varchar(50)
+);
+
+DROP FUNCTION table_exportacion (
+  id_marca integer,
+  ano_e integer
+);
+
+DROP FUNCTION table_exportacion (
+  expor exportacion[]
+);
+
+DROP FUNCTION table_legislacion (
+  id_pais integer
+);
+
+
+DROP FUNCTION validar_mayor_edad (
+  f_nac date,
+  c_date date = current_date
+);
+
+DROP FUNCTION validar_anada(
+  id_marca integer,
+  ano integer
+);

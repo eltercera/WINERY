@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS DENOMINACION (
   Den_ID serial NOT NULL, 
   Den_Creacion date NOT NULL, 
   Den_Nombre varchar(50) NOT NULL, 
-  Den_Descricion text, 
+  Den_Descripcion text, 
   Den_Categoria varchar(50)
 );
 
@@ -172,6 +172,7 @@ CREATE TABLE IF NOT EXISTS CALENDARIO (
 
 CREATE TABLE IF NOT EXISTS BODEGA (
   Bod_ID serial NOT NULL, 
+  Bod_Nombre varchar(50) NOT NULL, 
   Bod_Direccion text NOT NULL, 
   Bod_Fundacion date, 
   Bod_Dir_Tecnico varchar(50) NOT NULL, 
@@ -316,8 +317,8 @@ CREATE TABLE IF NOT EXISTS LUGAR (
   Lug_ID serial NOT NULL,
   Lug_Nombre varchar(50) NOT NULL,
   Lug_Tipo varchar(6) NOT NULL,
-  Lug_Continente varchar(10) NOT NULL,
-  Lug_Moneda varchar(10) NOT NULL,
+  Lug_Continente varchar(10),
+  Lug_Moneda varchar(10),
   FK_Lugar integer
 );
 
@@ -331,8 +332,8 @@ CREATE TABLE IF NOT EXISTS MARCA (
   Mar_ID serial NOT NULL,
   Mar_Descripcion text NOT NULL,
   Mar_Nombre varchar(50) NOT NULL,
-  /*Mar_Des_Cata des_cata ARRAY NOT NULL,*/
-  Mar_Elaboracion fase_elaboracion_vino ARRAY,
+  Mar_Des_Cata des_cata ARRAY NOT NULL,
+  Mar_Elaboracion fase_elaboracion_vino,
   Mar_Temp_Servicio float NOT NULL,
   Mar_Maduracion integer NOT NULL,
   Mar_Ventana integer NOT NULL,

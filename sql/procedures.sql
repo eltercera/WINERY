@@ -161,6 +161,32 @@ $BODY$
 LANGUAGE plpgsql;
 
 
-
-
+CREATE OR REPLACE FUNCTION add_cosecha (
+  bodega varchar(50),
+  vinedo varchar(50),
+  ano integer,
+  eva varchar(50)
+) RETURNS void AS
+$BODY$
+DECLARE
+  id_p integer;
+  id_r integer;
+  id_d integer;
+  id_b integer;
+  id_v integer;
+  id_vi integer;
+BEGIN
+  vinedo = UPPER(vinedo);
+  bodega = UPPER(bodega);
+  SELECT INTO id_v,id_d,id_p,id_r,id_b,id_vi v.FK_Variedad,v.FK_denominacion,v.FK_pais,v.FK_region,v.FK_Bodega,v.Vin_ID
+    FROM VINEDO as V, BODEGA as b
+    WHERE UPPER(v.Vin_Nombre) = vinedo AND UPPER(b.Bod_Nombre) = bodega AND v.FK_Bodega = b.Bod_ID;
+  IF NOT FOUND THEN
+    RAISE 'El viñedo % no existe para la Bodega %.',vinedo,bodega;
+  END IF;
+  INSERT INTO COSECHA (cos_ano,cos_evaluacion,fk_vinedo,fk_bodega,fk_pais,fk_region,fk_variedad,fk_denominacion) VALUES
+  (ano,eva,id_vi,id_b,id_p,id_r,id_v,id_d);
+END;
+$BODY$
+LANGUAGE plpgsql;
 

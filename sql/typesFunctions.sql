@@ -590,9 +590,15 @@ CREATE OR REPLACE FUNCTION add_calificacion (
   h calificacion_vino
 ) RETURNS void AS
 $BODY$
+BEGIN
+  IF EXISTS (SELECT * FROM PRO_MAR WHERE FK_MARCA = id_marca and PM_Ano = h.ano) THEN
     UPDATE MARCA SET Mar_Calificaciones = array_append(Mar_Calificaciones,h) WHERE Mar_ID = id_marca;
+  ELSE
+     RAISE 'NO existe una Produccion para el año %',h.ano;
+  END IF;
+END;
 $BODY$
-LANGUAGE sql;
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION del_calificacion(
   id_marca integer,

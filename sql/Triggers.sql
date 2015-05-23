@@ -12,15 +12,21 @@ $tgg_pro_mar_cal_interno$
 DECLARE
   sum_exp integer;
 BEGIN
-  SELECT INTO sum_exp SUM(botellas) FROM table_exportacion (NEW.pm_exportaciones);
-  IF sum_exp > 0 THEN
-    NEW.pm_consumo_int = NEW.pm_botellas - sum_exp;
-    if NEW.pm_consumo_int < 0 THEN
-      RAISE NOTICE 'Exportacion exede a la Producción';
-      RETURN NULL;
+  IF NEW.pm_botellas > 0 AND EXTRACT(ISOYEAR FROM CURRENT_DATE) < NEW.pm_ano THEN
+	RAISE NOTICE 'El año Actual es menor que el de la poducción.';
+    RETURN NULL;
+  END IF;
+  IF NEW.pm_exportaciones <> OLD.pm_exportaciones THEN
+    SELECT INTO sum_exp SUM(botellas) FROM table_exportacion (NEW.pm_exportaciones);
+    IF sum_exp > 0 THEN
+      NEW.pm_consumo_int = NEW.pm_botellas - sum_exp;
+      IF NEW.pm_consumo_int < 0 THEN
+        RAISE NOTICE 'Exportacion exede a la Producción';
+        RETURN NULL;
+      END IF;
+    ELSE
+      NEW.pm_consumo_int = NEW.pm_botellas;
     END IF;
-  ELSE
-    NEW.pm_consumo_int = NEW.pm_botellas;
   END IF;
   RETURN NEW;
 END;
@@ -28,7 +34,7 @@ $tgg_pro_mar_cal_interno$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER tgg_pro_mar_cal_interno
-BEFORE INSERT OR UPDATE
+BEFORE UPDATE
 ON PRO_MAR
 FOR EACH ROW EXECUTE PROCEDURE tgg_pro_mar_cal_interno();
 
@@ -306,27 +312,29 @@ RETURNS trigger AS
 $tgg_auto_cos_pro_mar_his_pre$
 DECLARE
   rrow RECORD;
-  valid boolean;
+  prow RECORD;
+  procen float;
 BEGIN
   IF TG_WHEN = 'BEFORE' THEN
     RAISE NOTICE 'Before';
     IF EXISTS(SELECT * FROM table_cultivo(NEW.FK_Vinedo) WHERE ano = NEW.Cos_ano and hectareascultivadas > 0) THEN
       RETURN NEW;
     END IF;
+    RAISE NOTICE 'No existen cultivos con hectareas cultivadas para este Año';
     RETURN NULL;
-  ELSE
-    valid = TRUE;
-    FOR rrow IN SELECT DISTINCT(FK_MARCA) FROM COMPOSICION WHERE FK_Vinedo = NEW.FK_Vinedo LOOP
-      RAISE NOTICE 'MArca %',rrow.FK_Marca;
-      IF NOT validar_anada(rrow.FK_Marca,NEW.Cos_ano,FALSE) THEN
-        valid = FALSE
-        EXIT;
+  ELSIF TG_WHEN = 'AFTER' THEN
+    RAISE NOTICE 'After';
+    FOR rrow IN SELECT DISTINCT(c.FK_Marca), m.Mar_Maduracion FROM COMPOSICION as c, MARCA as m WHERE c.FK_Vinedo = NEW.FK_Vinedo AND c.FK_Marca = m.Mar_ID LOOP
+      RAISE NOTICE 'Marca %',rrow.FK_Marca;
+      procen = validar_anada_p(rrow.FK_Marca,NEW.Cos_ano,FALSE);
+      IF procen IS NOT NULL THEN
+        INSERT INTO PRO_MAR VALUES (NEW.Cos_ano+rrow.Mar_Maduracion, 0, 0,ARRAY[]::exportacion[],rrow.FK_Marca);
+        FOR prow IN SELECT Pre_ID, Pre_Precio_base FROM PRESENTACION WHERE FK_Marca = rrow.FK_Marca
+        LOOP
+          INSERT INTO HIS_PRESENTACION (HP_ano, HP_Precio,FK_Marca,FK_Presentacion) VALUES (NEW.Cos_ano+rrow.Mar_Maduracion,prow.Pre_Precio_base+(prow.Pre_Precio_base*procen),rrow.FK_Marca,prow.Pre_ID);
+        END LOOP;
       END IF;
     END LOOP;
-    IF valid THEN
-      INSERT INTO PRO_MAR VALUES (NEW.Cos_ano, 0, 0,ARRAY[]::exportacion[],rrow.FK_Marca);
-      /*Falta la insercion en HIS_PRESEINTACION */
-    END IF;
     RETURN NEW;
   END IF;
 END;
@@ -374,5 +382,3 @@ CREATE TRIGGER tgg_pais_validar_pais
 BEFORE INSERT OR UPDATE
 ON PAIS
 FOR EACH ROW EXECUTE PROCEDURE tgg_pais_validar_pais();
-
-

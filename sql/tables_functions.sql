@@ -184,4 +184,20 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
-
+/* table_calificacion
+ * A partir de un id de marca obtiene sus calificaciones
+ * Fecha de Creacion: 20/05/2015
+ */
+CREATE OR REPLACE FUNCTION table_calificacion (
+  id_mar integer
+) RETURNS TABLE(
+  index bigint,
+  nombre varchar(50),
+  valor integer,
+  ano integer
+) AS
+$BODY$
+  SELECT row_number() OVER () as index, nombre, valor, ano
+  FROM unnest((SELECT Mar_Calificaciones FROM MARCA WHERE Mar_ID = id_mar));
+$BODY$
+LANGUAGE sql;

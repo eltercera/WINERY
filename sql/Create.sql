@@ -319,6 +319,7 @@ CREATE TABLE IF NOT EXISTS LUGAR (
   Lug_Tipo varchar(6) NOT NULL,
   Lug_Continente varchar(10),
   Lug_Moneda varchar(10),
+  Lug_unidad_cambio float
   FK_Lugar integer
 );
 
@@ -431,6 +432,7 @@ CREATE TABLE IF NOT EXISTS PRESENTACION (
   Pre_ID serial NOT NULL,
   Pre_Tipo varchar(10) NOT NULL,
   Pre_Cantidad integer,
+  Pre_precio_base float NOT NULL,
   FK_Marca integer NOT NULL
 );
 

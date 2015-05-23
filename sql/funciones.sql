@@ -206,12 +206,12 @@ BEGIN
         CONTINUE;
       END IF;
     END IF;
-    
     IF UPPER(pais) = (SELECT UPPER(Pai_nombre) FROM BODEGA, PAIS WHERE Bod_ID = rec.FK_bodega AND Pai_ID = FK_Pais) THEN
       calificacion = calificacion + 1;
     ELSE
 	  calificacion = calificacion + 0.5;
     END IF;
+    calificacion = calificacion + (SELECT (AVG(valor)/100) from table_calificacion(rec.Mar_ID) WHERE ano >= (EXTRACT(ISOYEAR FROM CURRENT_DATE)-rec.Mar_ventana));
     Mar_id = rec.Mar_id;
     RETURN NEXT;
   END LOOP;

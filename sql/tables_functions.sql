@@ -1,7 +1,6 @@
 /* table_ingrediente
  * A partir de un id de marca y el indice de la receta
  * obtiene la tabla de los ingredientes de la receta
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION table_ingrediente (
   id_marca integer,
@@ -20,7 +19,6 @@ LANGUAGE sql;
 
 /* table_receta
  * A partir de un id de marca obtiene la tabla de sus recetas con su indice
- * Fecha de Creacion: 15/05/2015
  */
 CREATE OR REPLACE FUNCTION table_receta (
   id_marca integer
@@ -42,7 +40,6 @@ LANGUAGE sql;
 
 /* table_exportacion
  * A partir de un id de marca y un año obtiene la tabla de exportaciones
- * Fecha de Creacion: 19/05/2015
  */
 CREATE OR REPLACE FUNCTION table_exportacion (
   id_marca integer,
@@ -60,7 +57,6 @@ LANGUAGE sql;
 
 /* table_exportacion
  * A partir de un array de exportaciones obtiene la tabla de exportaciones
- * Fecha de Creacion: 19/05/2015
  */
 CREATE OR REPLACE FUNCTION table_exportacion (
   expor exportacion[]
@@ -77,7 +73,6 @@ LANGUAGE sql;
 
 /* table_legislacion
  * A partir de un id de pais obtiene la tabla de legislaciones
- * Fecha de Creacion: 19/05/2015
  */
 CREATE OR REPLACE FUNCTION table_legislacion (
   id_pais integer
@@ -97,7 +92,6 @@ LANGUAGE sql;
 
 /* table_temperatura
  * A partir de un id de region obtiene la tabla de sis temperaturas
- * Fecha de Creacion: 20/05/2015
  */
 CREATE OR REPLACE FUNCTION table_temperatura (
   id_region integer
@@ -116,7 +110,6 @@ LANGUAGE sql;
 
 /* table_presipitacion
  * A partir de un id de region obtiene la tabla de sus presipitaciones
- * Fecha de Creacion: 20/05/2015
  */
 CREATE OR REPLACE FUNCTION table_presipitacion (
   id_region integer
@@ -135,7 +128,6 @@ LANGUAGE sql;
 
 /* table_suelos
  * A partir de un id de region obtiene la tabla de sus presipitaciones
- * Fecha de Creacion: 20/05/2015
  */
 CREATE OR REPLACE FUNCTION table_suelos (
   id_region integer
@@ -152,7 +144,6 @@ LANGUAGE sql;
 
 /* table_cultivo
  * A partir de un id de vinedo obtiene la tabla de sus coltivos
- * Fecha de Creacion: 20/05/2015
  */
 CREATE OR REPLACE FUNCTION table_cultivo (
   id_vinedo integer
@@ -169,7 +160,6 @@ LANGUAGE sql;
 
 /* table_resultado_s
  * A partir de un id de Solicitud obtiene los resultados
- * Fecha de Creacion: 20/05/2015
  */
 CREATE OR REPLACE FUNCTION table_resultado_s (
   id_sol integer
@@ -186,7 +176,6 @@ LANGUAGE sql;
 
 /* table_calificacion
  * A partir de un id de marca obtiene sus calificaciones
- * Fecha de Creacion: 20/05/2015
  */
 CREATE OR REPLACE FUNCTION table_calificacion (
   id_mar integer

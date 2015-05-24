@@ -68,9 +68,6 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
-
-
-
 CREATE OR REPLACE FUNCTION validar_anada_p(
   id_marca integer,
   ano integer,
@@ -78,16 +75,16 @@ CREATE OR REPLACE FUNCTION validar_anada_p(
 ) RETURNS float AS
 $BODY$
 DECLARE
-	Vin record;
-	cali char(2);
-	salida float;
-	can integer;
-	mad int;
+  Vin record;
+  cali char(2);
+  salida float;
+  can integer;
+  mad int;
 BEGIN
   IF res THEN
-	SELECT INTO mad mar_maduracion FROM MARCA WHERE Mar_ID = id_marca;
+    SELECT INTO mad mar_maduracion FROM MARCA WHERE Mar_ID = id_marca;
   ELSE
-	mad = 0;
+    mad = 0;
   end IF;
   salida = 0;
   can = 0;
@@ -97,7 +94,7 @@ BEGIN
     IF NOT FOUND THEN
       RETURN NULL;
     ELSE
-	  can = can + 1;
+      can = can + 1;
       IF cali = 'E' THEN
         salida = salida + 0.20;
       ELSIF cali = 'MB' THEN
@@ -134,8 +131,6 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
-
-
 CREATE OR REPLACE FUNCTION get_Lug_p_name(
   i_id integer,
   OUT nombre varchar(50),
@@ -164,8 +159,6 @@ $BODY$
   SELECT cantidad/(SELECT DISTINCT(lug_unidad_cambio) FROM LUGAR WHERE moneda = lug_moneda);
 $BODY$
 LANGUAGE sql;
-
-
 
 CREATE OR REPLACE FUNCTION filtro(
   id_consumidor integer,
@@ -211,9 +204,15 @@ BEGIN
     ELSE
 	  calificacion = calificacion + 0.5;
     END IF;
-    calificacion = calificacion + (SELECT (AVG(valor)/100) from table_calificacion(rec.Mar_ID) WHERE ano >= (EXTRACT(ISOYEAR FROM CURRENT_DATE)-rec.Mar_ventana));
+    IF experto <> '' THEN
+      calificacion = calificacion + (SELECT (AVG(valor)/100) from table_calificacion(rec.Mar_ID) WHERE ano >= (EXTRACT(ISOYEAR FROM CURRENT_DATE)-rec.Mar_ventana) AND UPPER(nombre) = UPPER(experto));
+    ELSE
+      calificacion = calificacion + (SELECT (AVG(valor)/100) from table_calificacion(rec.Mar_ID) WHERE ano >= (EXTRACT(ISOYEAR FROM CURRENT_DATE)-rec.Mar_ventana));
+    END IF;
     Mar_id = rec.Mar_id;
-    RETURN NEXT;
+    IF calificacion IS NOT NULL THEN
+	  RETURN NEXT;
+	END IF;
   END LOOP;
 END;
 $BODY$

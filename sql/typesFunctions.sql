@@ -1,6 +1,6 @@
 
 /* suelo
- * Constructor tipo Suelo
+ * Constructor tipo Suelo.
  */
 CREATE OR REPLACE FUNCTION suelo (
   nombre varchar(25) ,
@@ -45,7 +45,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 /* add_exportacion
- * A partir de un año, y id_marca, pais e botellas exportadas
+ * A partir de un año, id_marca, pais y botellas exportadas
  * agrega su respectivo registro
  */
 CREATE OR REPLACE FUNCTION add_exportacion (
@@ -244,6 +244,9 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+/* add_receta
+ * Apartir de in ud de marca agreda una receta
+ */
 CREATE OR REPLACE FUNCTION add_receta(
   id_marca integer,
   m receta
@@ -305,7 +308,9 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
-
+/* add_temperatura
+ * Agrega una medida temperatura a una region
+ */
 CREATE OR REPLACE FUNCTION add_temperatura(
   id_region integer,
   m medida
@@ -315,6 +320,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* del_temperatura
+ * Elimina una medida temperatura a una region
+ */
 CREATE OR REPLACE FUNCTION del_temperatura(
   id_region integer,
   ind integer
@@ -324,6 +332,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* add_presipitaciones
+ * Agrega una medida presipitacion a una region
+ */
 CREATE OR REPLACE FUNCTION add_presipitaciones(
   id_region integer,
   m medida
@@ -333,6 +344,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* del_presipitaciones
+ * Elimina una medida presipitacion a una region
+ */
 CREATE OR REPLACE FUNCTION del_presipitaciones(
   id_region integer,
   ind integer
@@ -342,6 +356,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* add_riesgo
+ * Agrega un riesgo de viña a region
+ */
 CREATE OR REPLACE FUNCTION add_riesgo(
   id_region integer,
   r varchar(100)
@@ -351,6 +368,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* del_riesgo
+ * elinin a un riesgo de viña a region
+ */
 CREATE OR REPLACE FUNCTION del_riesgo(
   id_region integer,
   ind integer
@@ -360,6 +380,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* add_suelo
+ * Agrega a un suelo a region
+ */
 CREATE OR REPLACE FUNCTION add_suelo(
   id_region integer,
   s suelo
@@ -369,6 +392,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* del_suelo
+ * Elimina un suelo de region
+ */
 CREATE OR REPLACE FUNCTION del_suelo(
   id_region integer,
   ind integer
@@ -498,6 +524,9 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+/* add_cultivo
+ * Agrega un cultivo a un viñedo
+ */
 CREATE OR REPLACE FUNCTION add_cultivo (
   id_vinedo integer,
   c cultivo
@@ -507,6 +536,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* del_cultivo
+ * Elimina un cultivo a un viñedo
+ */
 CREATE OR REPLACE FUNCTION del_cultivo(
   id_vinedo integer,
   ind integer
@@ -515,7 +547,6 @@ $BODY$
   UPDATE VINEDO SET Vin_Hect_Cult = array_remove(Vin_Hect_Cult,Vin_Hect_Cult[ind])  WHERE Vin_ID = id_vinedo;
 $BODY$
 LANGUAGE sql;
-
 
 /* historiabodega
  * Constructor de el tipo historiabodega
@@ -539,7 +570,9 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
-
+/* add_historia
+ * Agrege Historia a bodega
+ */
 CREATE OR REPLACE FUNCTION add_historia (
   id_bodega integer,
   h historiabodega
@@ -549,6 +582,9 @@ $BODY$
 $BODY$
 LANGUAGE sql;
 
+/* del_historia
+ * Elimina historia a bodega
+ */
 CREATE OR REPLACE FUNCTION del_historia(
   id_bodega integer,
   ind integer
@@ -585,6 +621,9 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+/* add_calificacion
+ * Agrega calificacion a una marca
+ */
 CREATE OR REPLACE FUNCTION add_calificacion (
   id_marca integer,
   h calificacion_vino
@@ -600,6 +639,9 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+/* del_calificacion
+ * Elimina calificacion a una marca
+ */
 CREATE OR REPLACE FUNCTION del_calificacion(
   id_marca integer,
   ind integer

@@ -312,14 +312,13 @@ CREATE TABLE IF NOT EXISTS JUEZ (
 * LUGAR
 * Fecha de Creacion: Mayo 16
 */
-
 CREATE TABLE IF NOT EXISTS LUGAR (
   Lug_ID serial NOT NULL,
   Lug_Nombre varchar(50) NOT NULL,
   Lug_Tipo varchar(6) NOT NULL,
   Lug_Continente varchar(10),
   Lug_Moneda varchar(10),
-  Lug_unidad_cambio float
+  Lug_unidad_cambio float,
   FK_Lugar integer
 );
 
@@ -333,7 +332,7 @@ CREATE TABLE IF NOT EXISTS MARCA (
   Mar_ID serial NOT NULL,
   Mar_Descripcion text NOT NULL,
   Mar_Nombre varchar(50) NOT NULL,
-  Mar_Des_Cata des_cata ARRAY NOT NULL,
+  Mar_Des_Cata des_cata NOT NULL,
   Mar_Elaboracion fase_elaboracion_vino,
   Mar_Temp_Servicio float NOT NULL,
   Mar_Maduracion integer NOT NULL,

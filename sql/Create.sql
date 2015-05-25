@@ -312,13 +312,14 @@ CREATE TABLE IF NOT EXISTS JUEZ (
 * LUGAR
 * Fecha de Creacion: Mayo 16
 */
+
 CREATE TABLE IF NOT EXISTS LUGAR (
   Lug_ID serial NOT NULL,
   Lug_Nombre varchar(50) NOT NULL,
   Lug_Tipo varchar(6) NOT NULL,
   Lug_Continente varchar(10),
   Lug_Moneda varchar(10),
-  Lug_unidad_cambio float,
+  Lug_unidad_cambio float
   FK_Lugar integer
 );
 
@@ -409,7 +410,8 @@ CREATE TABLE IF NOT EXISTS PAIS (
   Pai_Moneda varchar(10),
   Pai_Legislaciones legislacion ARRAY,
   Pai_Mapa oid,
-  Pai_Union_Superior varchar(10)
+  Pai_Union_Superior varchar(10),
+  Pai_Descripcion text
 );
 
 /*

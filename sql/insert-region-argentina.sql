@@ -77,3 +77,31 @@ update region set reg_descripcion_general.altitud = medida('m',370,'Sobre el niv
 select add_temperatura(:id_region,medida('°C',12,' Media Anual',16));
 select add_presipitaciones(:id_region,medida('mm',190,'por año'));
 
+
+
+
+
+
+
+
+
+
+
+
+
+\lo_import ../documentos/Ley14878.pdf
+select  add_legislacion (:id_pais,legislacion('LEY GENERAL DE VINOS Nº 14.878',1959,'ley','Ley Promulgada por el Intituto Nacional de Viticultura.',:LASTOID));
+
+\lo_import ../documentos/ResolucionC15-2005.pdf
+select  add_legislacion (:id_pais,legislacion('Resolucion C15 - 2005',2005,'norma','Resolución que genera la DOC Lujan de Cuyo.',:LASTOID));
+
+\lo_import ../documentos/ResolucionC31-2007.pdf
+select  add_legislacion (:id_pais,legislacion('Resolucion C31 - 2007',2007,'norma','Resolución que genera la DOC San Rafael.',:LASTOID));
+
+
+
+
+
+
+
+

@@ -79,29 +79,6 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
-/* del_legislacion
- * elimina la informacion de ina legislacion a un pais
- */
-CREATE OR REPLACE FUNCTION del_legislacion (
-  id_pais integer,
-  ind integer
-) RETURNS void AS
-$BODY$
-DECLARE
-  legs legislacion[];
-BEGIN
-  SELECT INTO legs Pai_Legislaciones FROM PAIS WHERE Pai_ID = id_pais;
-  IF NOT FOUND THEN
-    RAISE NOTICE 'IDENTIFICADOR % de pais no encontrado',id_pais;
-  ELSE
-    legs = array_remove(legs,legs[ind]);
-    UPDATE PAIS SET Pai_Legislaciones = legs WHERE Pai_ID = id_pais;
-  END IF;
-END;
-$BODY$
-LANGUAGE plpgsql;
-
-
 /* legislacion
  * Constructor de el tipo legislacion
  */

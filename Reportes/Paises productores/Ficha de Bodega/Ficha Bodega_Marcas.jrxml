@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Ficha Bodega_Marcas" language="groovy" pageWidth="531" pageHeight="752" columnWidth="531" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="674aed99-5880-4f20-ac9a-fb1a5e218084">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_bodega" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+  M.Mar_nombre,
+  M.Mar_Descripcion,
+  oid_to_bytea(M.Mar_Imagen) as Imagen
+FROM BODEGA AS B, MARCA AS M
+WHERE B.Bod_ID = $P{id_bodega} AND M.FK_Bodega = B.Bod_ID;]]>
+	</queryString>
+	<field name="mar_nombre" class="java.lang.String"/>
+	<field name="mar_descripcion" class="java.lang.String"/>
+	<field name="imagen" class="java.io.InputStream"/>
+	<detail>
+		<band height="172" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="531" height="159" uuid="6234bd5c-e536-41e4-848f-24e72c9581f1"/>
+			</rectangle>
+			<textField>
+				<reportElement x="151" y="11" width="360" height="27" uuid="5aaf28c5-bf63-42b2-bf84-e2c494d07e0e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mar_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="151" y="38" width="360" height="109" uuid="32112e28-1ada-45f9-bc7f-5d6a3b3ad8b4"/>
+				<textElement>
+					<paragraph lineSpacing="1_1_2" firstLineIndent="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mar_descripcion}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle" onErrorType="Blank">
+				<reportElement stretchType="RelativeToTallestObject" x="15" y="11" width="124" height="136" uuid="efb4150e-1818-402a-adf6-3b0ad8a54829"/>
+				<imageExpression><![CDATA[$F{imagen}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

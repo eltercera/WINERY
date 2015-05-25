@@ -190,3 +190,20 @@ $BODY$
   FROM unnest((SELECT Mar_Calificaciones FROM MARCA WHERE Mar_ID = id_mar));
 $BODY$
 LANGUAGE sql;
+
+
+
+CREATE OR REPLACE FUNCTION table_historia (
+  id_bodega integer
+) RETURNS TABLE  (
+  index bigint,
+  ano integer,
+  echo text
+) AS
+$BODY$
+  SELECT row_number() OVER () as index, ano, echo
+  FROM unnest((SELECT bod_historia FROM Bodega WHERE Bod_ID = id_bodega));
+$BODY$
+LANGUAGE sql;
+
+

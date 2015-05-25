@@ -106,7 +106,9 @@ BEGIN
   IF NOT FOUND THEN
     RAISE 'La Denominacion + Variedad no existe.';
   END IF;
-  INSERT INTO PAI_REG (fk_pais,fk_region) VALUES (id_p,id_r);
+  IF NOT EXISTS(SELECT * FROM PAI_REG where fk_pais=id_p and fk_region = id_r) THEN
+    INSERT INTO PAI_REG (fk_pais,fk_region) VALUES (id_p,id_r);
+  END IF;
   INSERT INTO DV_PR (fk_pais,fk_region,fk_Variedad,fk_Denominacion) VALUES (id_p,id_r,id_v,id_d);
 END;
 $BODY$
@@ -155,7 +157,7 @@ BEGIN
   IF NOT FOUND THEN
     RAISE 'La Denominacion + Variedad no existe.';
   END IF;
-  INSERT INTO VINEDO (fk_pais,fk_region,fk_Variedad,fk_Denominacion,Vin_Nombre,Vin_Hect_cult,fk_bodega) VALUES (id_p,id_r,id_v,id_d,v_nombre,ARRAY[]::cultivo[],id_b);
+  INSERT INTO VINEDO (fk_pais,fk_region,fk_Variedad,fk_Denominacion,Vin_Nombre,Vin_Hect_cult,fk_bodega) VALUES (id_p,id_r,id_v,id_d,vi_nombre,ARRAY[]::cultivo[],id_b);
 END;
 $BODY$
 LANGUAGE plpgsql;

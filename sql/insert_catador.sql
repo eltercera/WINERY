@@ -54,4 +54,19 @@ insert into catador_consultor (cc_nivel,cc_nombre,cc_email,cc_genero,cc_fecha_na
 	('EXPERTO','Luca Gardini','luca@lucagardini.com','M',to_date('19-09-1981','DD-MM-YYYY')) returning cc_id as id_catador \gset
 UPDATE catador_consultor set cc_telefonos = array_append((cc_telefonos),telefono(39,'333','34286572','oficina')) where cc_id = :id_catador;
 
+insert into catador_consultor (cc_nivel,cc_nombre,cc_email,cc_genero,cc_fecha_nacimiento) values
+	('EXPERTO','Diego Meraviglia','dmerviglia@nasommelier.com','M',to_date('16-09-1979','DD-MM-YYYY')) returning cc_id as id_catador \gset
+UPDATE catador_consultor set cc_telefonos = array_append((cc_telefonos),telefono(1,'929','2262395','oficina')) where cc_id = :id_catador;
+
+insert into catador_consultor (cc_nivel,cc_nombre,cc_email,cc_genero,cc_fecha_nacimiento) values
+	('EXPERTO','Mauro Cirilli','mcirilli@nasommelier.com','M',to_date('27-03-1977','DD-MM-YYYY')) returning cc_id as id_catador \gset
+UPDATE catador_consultor set cc_telefonos = array_append((cc_telefonos),telefono(1,'415','9550663','oficina')) where cc_id = :id_catador;
+
+insert into catador_consultor (cc_nivel,cc_nombre,cc_email,cc_genero,cc_fecha_nacimiento) values
+	('EXPERTO','Alessia Botturi','abotturi@nasommelier.com','M',to_date('18-06-1980','DD-MM-YYYY')) returning cc_id as id_catador \gset
+UPDATE catador_consultor set cc_telefonos = array_append((cc_telefonos),telefono(1,'628','3892148','oficina')) where cc_id = :id_catador;
+
+
+
+
 

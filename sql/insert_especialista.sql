@@ -40,5 +40,11 @@ values (2,23);
 insert into especialista (fk_region,fk_catador_consultor)
 values (9,24);
 
+insert into especialista (fk_region,fk_catador_consultor)
+values (10,25);
 
+insert into especialista (fk_region,fk_catador_consultor)
+values (9,26);
 
+insert into especialista (fk_region,fk_catador_consultor)
+values (10,27);
